@@ -1,0 +1,66 @@
+* {
+    font-size: 30px !important;
+}
+
+.no-drag {
+    -webkit-user-drag: none;  /* Safari and Chrome */
+    -khtml-user-drag: none;   /* Konqueror */
+    -moz-user-drag: none;     /* Firefox */
+    -o-user-drag: none;       /* Opera */
+    user-drag: none;          /* Standard */
+    
+    pointer-events: none;     /* Disable all mouse events like clicking */
+}
+
+#wuh {
+    position: absolute;
+    top: 30vw;
+    left:70vh;
+}
+
+#unban-request-details { 
+    background-color: #00000055 ! important; 
+    position: absolute !important; 
+    left: 30vw !important; } 
+
+.jUUWca { 
+    display: none !important
+} 
+
+#foreground{
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+#background{
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1000;
+}
+
+
+#twitch {
+    width: 100vw;
+    height: 100vh;
+}
+
+.message-author__username{
+    color: red !important;
+}
+
+#unban-request-details {
+    position: absolute !important;
+    margin-left: 20vw;
+    top: 35vh;
+    left: 20vw !important;
+    width: 60vw;
+    height: 60vh;
+
+}
