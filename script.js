@@ -18,7 +18,7 @@ loadjQuery(function() {
         
         // Inject external HTML into #content div
         const newDiv = $('<div></div>').text('This is a dynamically created div!');
-        newDiv.load('content.html');
+        newDiv.load('https://flourek.github.io/unbanplease/content.html');
         $('body').append(newDiv);
         
 
@@ -26,7 +26,7 @@ loadjQuery(function() {
         $('<link/>', {
             rel: 'stylesheet',
             type: 'text/css',
-            href: 'style.css'
+            href: 'https://flourek.github.io/unbanplease/style.css'
         }).appendTo('head');
             
        
