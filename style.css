@@ -1,5 +1,64 @@
+@font-face {
+    font-family: 'papers';
+    src: url('https://wierzba.wzks.uj.edu.pl/~21_bacza/unbanplease/res/papers.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-smooth: never;
+    -webkit-font-smoothing : none;
+}
+
+@font-face {
+    font-family: 'handwriting';
+    src: url('https://wierzba.wzks.uj.edu.pl/~21_bacza/unbanplease/res/QEVRead.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+    overflow: hidden;
+}
+
+.d-none{
+    display: none !important;
+}
+
 * {
-    font-size: 30px !important;
+    font-family: 'papers' !important; /* Fallback to sans-serif */
+    font-size: 14px !important;
+}
+
+h5 {
+    font-size: 18px !important;
+}
+
+h5, p, .hzgYb, .hfwpbT, .jbtaqh, .dTXPRZ, .text-fragment {
+   color: black !important 
+}
+
+.iBoSDS{
+    font-family: 'handwriting' !important; 
+    font-size: 66px !important;
+}
+
+.cXFDOs {
+    border-radius: 0px;
+    border: 2px rgb(87, 87, 87) solid;
+}
+
+.bFxzAY{
+    padding-bottom: 1rem;
+}
+/* 
+.iNjobR{
+    display: unset !important;
+} */
+
+.viewer-card-mod-logs-comment-line:hover {
+    background-color: rgb(145, 145, 145) !important;
+}
+
+.unban-requests-tabs__load-previous{
+    background: 0 !important;
 }
 
 .no-drag {
@@ -12,16 +71,27 @@
     pointer-events: none;     /* Disable all mouse events like clicking */
 }
 
-#wuh {
+
+
+#buh {
     position: absolute;
     top: 30vw;
     left:70vh;
 }
 
-#unban-request-details { 
-    background-color: #00000055 ! important; 
-    position: absolute !important; 
-    left: 30vw !important; } 
+#next {
+    content: " ";
+    position: absolute;
+    width: 4vw;
+    height: 3vw;
+    left: 30.5%;
+    top: 22%;
+    z-index: 10000;
+}
+
+
+
+    
 
 .jUUWca { 
     display: none !important
@@ -33,6 +103,165 @@
     left:0;
     width: 100vw;
     height: 100vh;
+}
+
+#border{
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    border: 0;
+    height: 34vh;
+}
+
+#boothbackground{
+    position: absolute;
+    left: 5.4vw;
+    top: 34vh;
+    height: 30vh;
+    width: 28vw;
+    z-index: 1;
+}
+
+#boothdesk{
+  position: absolute;
+  left: 0;
+  top: 34vh;
+  height: 66.4vh;
+  width: 33.3vw;
+  z-index: 3;
+}
+
+
+#person {
+    width: 25vw;
+    position: absolute;
+    left: -16.5vw; /* End at 16.5vw */
+    top: 45vh; /* Vertical position */
+    z-index: 2;
+    /* Animation */
+    transform-origin: 16.5vw 60vh; /* Rotation point */
+}
+
+.personMoveIn {
+    animation: moveAndRotate 3s ease-in-out forwards;
+}
+
+.personStationary {
+    top: 42vh !important; /* Final position */
+    left: 16.5vw !important;
+    filter: brightness(1);
+}
+
+.personLeaveLeft {
+    animation: moveAndRotate 3s ease-in-out reverse;
+}
+
+.personLeaveRight {
+    transform: scaleX(-1) translateX(-8vw);
+    animation: moveAndRotate 3s ease-in-out forwards;
+}
+
+
+#personAvatar{
+    width: 9vw;
+    border-radius: 100%;
+    position: absolute;
+    left: -1vw;
+    top: -2vh;
+    z-index: 2;
+    height: 17vh;
+}
+#personBody{
+    width: 20vw;
+    z-index: 2;
+    position: absolute;
+    left: -6.5vw;
+    top: -12vh;
+    height: 34vh;
+    image-rendering: crisp-edges;
+}
+
+@keyframes moveAndRotate {
+    0% {
+        left: -16.5vw;
+        top: 42vh; /* Start position */
+        filter: brightness(0.2);
+    }
+    10% {
+        top: 47vh; /* Move up by 5vh */
+    }
+    20% {
+        top: 42vh; /* Move down to 42vh */
+    }
+    30% {
+        top: 47vh; /* Move up again */
+    }
+    40% {
+        top: 42vh;
+    }
+    50% {
+        top: 47vh;
+    }
+    60% {
+        top: 42vh;
+    }
+    70% {
+        top: 47vh;
+    }
+    80% {
+        top: 42vh;
+    }
+    90% {
+        top: 44vh;
+        filter: brightness(0.2);
+    }
+    100% {
+        top: 42vh; /* Final position */
+        left: 16.5vw;
+        filter: brightness(1);
+    }
+}
+
+#borderWrapper{
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.accept_walk {
+    position: absolute;
+    top: 23.2vh;
+    left: 36.45vw;
+    width: 49vw;
+    height: 11vh;
+}
+
+.deny_walk {
+    position: absolute;
+    top: 25.1vh;
+    left: 23.5vw;
+    width: 5vw;
+    height: 9vh;
+}
+
+.walk_in {
+    position: absolute;
+    top: 24vh;
+    left: 23.5vw;
+    width: 5vw;
+    height: 9vh;
+}
+
+#car {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15vw;
+    height: 34.2vh;
+    z-index: 10;
 }
 
 
@@ -49,18 +278,236 @@
 #twitch {
     width: 100vw;
     height: 100vh;
+    z-index: 1000 !important;
 }
 
 .message-author__username{
     color: red !important;
 }
 
+.tw-image-avatar{
+    border-radius: 0px !important;
+}
+
 #unban-request-details {
     position: absolute !important;
     margin-left: 20vw;
-    top: 35vh;
-    left: 20vw !important;
-    width: 60vw;
+    top: 110vh;
+    left: 15vw !important;
+    width: 30vw;
     height: 60vh;
+    border: white solid  10px;
+    background-color: rgb(243, 243, 243) !important;
+    animation: print 2s ease-in-out forwards;
+    z-index: 5 !important;
+    /* animation-delay: 1s; */
+}
 
+
+
+#unban-request-details:before {
+    content: " "; /* to ensure it displays */
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    bottom: -2px;
+    border: 4px dashed rgb(78, 78, 78);
+    pointer-events: none; /* user can't click on it */
+  }
+
+
+  @keyframes print {
+    0% {
+        top: 110vh; /* Start outside of the viewport */
+    }
+    10% {
+        top: 90vh; /* Move up a bit */
+    }
+    30% {
+        top: 90vh; /* Pause */
+    }
+    40% {
+        top: 70vh; /* Move up */
+    }
+    60% {
+        top: 70vh; /* Pause */
+    }
+    70% {
+        top: 50vh; /* Move up */
+    }
+    90% {
+        top: 50vh; /* Pause */
+    }
+    100% {
+        top: 31vh; /* Stop here */
+    }
+}
+
+
+@keyframes remove {
+    100% {
+        top: 100vh; /* Stop here */
+    }
+}
+
+.unban-requester-message h6 {
+    color: black !important;
+    font-size: 24px !important;
+    position: fixed !important;
+    display: block !important;;
+    left: 68vw;
+    width: 25vw;
+    min-height: 30vh !important;
+    overflow-y: scroll !important;
+    top:-100vh;
+    padding: 1rem;
+    /* top: 30vh;
+    left: 40vw !important;
+    border: white solid  10px; */ 
+    background-color: rgb(235, 241, 150, 255) !important;
+    -webkit-box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
+    -moz-box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
+    box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
+    animation: slideFromTop 0.5s ease-in forwards;
+    /* animation-delay: 1s; */
+}
+
+@keyframes slideFromTop {
+    0% { 
+        top: -100vh;
+    }
+    to {
+        top: 40vh;
+    }
+}
+
+
+@keyframes slideIn {
+    from {
+        right: -30vw;
+    }
+    to {
+        right: 0;
+    }
+}
+
+#stamps {
+    position: absolute;
+    right: 200px;
+    background-color: white;
+    content: " ";
+    width: 280px;
+    top: 600px;
+    height: 80px;
+    transition: transform 0.5s ease-in-out; /* Smooth transition of transform */
+    transform: translateX(-30px) scale(3);
+    z-index: 6 !important;
+}
+
+.stamp-hide {
+    transform: translateX(620px) scale(3) !important; /* Move back to original position */
+}
+
+#stampPull {
+    background-color: purple;
+    position: absolute;
+    content: " ";
+    width: 5%;
+    left: 0%;
+    height: 10vw; 
+    overflow: visible;
+}
+
+#stampBar{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+.stampInk {
+    position: absolute;
+    width: 15vw;
+    margin: auto;
+    left: 5vw;
+    top: 8vh;
+    image-rendering: crisp-edges;
+}
+
+
+#accept {
+    background-color: green;
+    position: absolute;
+    content: " ";
+    width: 10vw;
+    left: 5%;
+    height: 10vw; 
+}
+
+#reject {
+    background-color: red;
+    position: absolute;
+    content: " ";
+    width: 10vw;
+    left: 45%;
+    height: 10vw; 
+}
+
+
+#draggable { left: 60vw; top:40vh; width: 150px; height: 150px; padding: 0.5em; }
+
+.simplebar-content, .iRXYzb, .loBtjK, .dQIgZd{
+    background-color: #00000000 !important;
+}
+
+.scrollable-div {
+    position: absolute;
+    left: 68vw;
+    width: 25vw;
+    min-height: 30vh !important;
+    overflow-y: auto !important;
+    top:40vh;
+
+    background-color: #f9f9f9; /* Optional: background color */
+}
+
+
+
+.black-screen {
+    position: absolute;
+    display: none !important;
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000 !important;
+    transition: transform 1.5s ease-in-out; /* Smooth transition of transform */
+    transform: translateY(0vh);
+}
+
+.black-screen-hide {
+    transform: translateY(-100vh) !important; /* Move back to original position */
+}
+
+.centered-div {
+    text-align: center;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
 }
