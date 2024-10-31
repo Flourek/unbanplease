@@ -1,10 +1,14 @@
 
-var uri = new URL('https://wierzba.wzks.uj.edu.pl/~21_bacza/unbanplease/');
+var uri = new URL('https://flourek.github.io/unbanplease/');
 
 var traveller_index = -1;
 var occupied = false;
+var lastTraveller = false;
 var scale = 1; // Default scale
 var paperZIndex = 5;
+var isDragging = false;
+var personUnban = false;
+var keysdown = {};  // tracks which keyboard keys are currently held
 
 var streamerMode = false;
 var originalAvatarSrc;
@@ -24,8 +28,13 @@ let music = new Audio(uri + 'res/snd/Theme.wav');
 music.loop = true; // Set looping
 music.play(); 
 
+var badWords = [];
+$.get(uri + 'res/badwords.txt', function(data) {
+    badWords = data.split(/\r?\n/).filter(word => word.trim() !== ""); // Split by line and remove empty lines
+});
 
-// Function to dynamically load jQuery
+
+// Inject jQuery
 function loadjQuery(callback) {
     var script = document.createElement('script');
     script.src = "https://code.jquery.com/jquery-3.7.1.js";  // URL of jQuery CDN
@@ -39,51 +48,249 @@ function loadjQuery(callback) {
      document.head.appendChild(script);  // Append script to head
      document.head.appendChild(scripte); 
      scripte.onload = callback; 
-    
 }
 
-function getScaleFactor() {
-    const transform = $('body').css('transform');
-    if (transform !== 'none') {
-        const values = transform.split('(')[1].split(')')[0].split(',');
-        scale = parseFloat(values[0]); // Extract the scale value
-    }
-}
+// Inject custom scripts html and css
+loadjQuery(function() {
+    $(document).ready(function() {
+        const baseWidth = 1920;
+        const baseHeight = 1080;
 
-function choose(array){
-    return array[Math.floor(Math.random() * array.length)];
-}
+        // Function to scale the entire body element based on the current viewport
+        function scaleToFitViewport() {
+            const scaleX = window.innerWidth / baseWidth;
+            const scaleY = window.innerHeight / baseHeight;
+            const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
 
-function fadeOutAudio(audio, duration) {
-    let fadeOutInterval = 50; // Milliseconds for each step
-    let steps = duration / fadeOutInterval; // Total steps for the fade out
-    let volumeStep = audio.volume / steps; // Amount to decrease volume in each step
+            // Scale the body
+            $('body').css({
+                transform: 'scale(' + scale + ')',
+                width: baseWidth + 'px',
+                height: baseHeight + 'px',
+            });
 
-    let fadeOutTimer = setInterval(() => {
-        if (audio.volume > volumeStep) {
-            audio.volume -= volumeStep; // Decrease volume
-        } else {
-            audio.volume = 0; // Set to 0 to avoid going negative
-            clearInterval(fadeOutTimer); // Stop when volume reaches 0
-            audio.pause(); // Pause the audio
-            audio.currentTime = 0; // Reset to start
+            // Center the body in the viewport (if necessary)
+            $('body').css({
+                left: (window.innerWidth - (baseWidth * scale)) / 2 + 'px',
+                top: (window.innerHeight - (baseHeight * scale)) / 2 + 'px',
+                position: 'absolute',
+            });
         }
-    }, fadeOutInterval);
-    
-    setTimeout(function(){ 
-        audio.pause();
-    }, duration + 30);
 
+        // Call the function initially
+        scaleToFitViewport();
+
+        // Recalculate scaling on window resize
+        $(window).resize(function() {
+            scaleToFitViewport();
+            getScaleFactor();
+        });
+
+        console.log("jQuery has been loaded and is ready to use.");
+        
+        // Inject external HTML into #content div
+        const newDiv = $('<div id="sus"></div>').text('This is a dynamically created div!');
+        
+        // Inject external CSS by appending it to the head of the document
+        $('<link/>', {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: uri + 'style.css'
+        }).appendTo('head');
+      
+        // $('<link/>', {
+        //     rel: 'stylesheet',
+        //     type: 'text/css',
+        //     href: 'https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css'
+        // }).appendTo('head');
+        
+        newDiv.load(uri + 'content.html', function(data) {
+            // Replace __URL__ in the loaded content with the actual URL
+            const modifiedContent = data.replace(/URL/g, uri);
+            
+            // Set the modified content to the new div
+            newDiv.html(modifiedContent);
+        });
+
+        $('body').append(newDiv);
+        
+
+    });
+});
+
+
+
+// Function waiting for twitch to load everything
+function startObserving() {
+    const targetNode = document.getElementById('root');
+    
+    // Options for the observer (which mutations to observe)
+    const config = { attributes: true, childList: true, subtree: true };
+
+    // Callback function to execute when mutations are observed
+    const callback = function(mutationsList) {
+        for (let mutation of mutationsList) {
+            // Check if the data-a-page-events-submitted attribute is added
+
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-a-page-events-submitted') {
+                if ( $('#unban-request-details') ){
+                    onPageLoaded();
+                    observer.disconnect(); // Stop observing once the attribute is detected
+                    break;                  // Exit loop after executing your code
+                }
+            }
+        }
+    };
+
+    const observer = new MutationObserver(callback);
+
+    observer.observe(targetNode, config);
+}
+
+// Start observing immediately
+startObserving();
+
+
+function getScaledDimensions(element) {
+    
+    getScaleFactor();
+    pos = element.position();
+
+
+    const originalHeight = element.outerHeight();
+    const originalWidth =  element.outerWidth();
+
+    // Get the computed style to find the transform
+    const computedStyle = element.css('transform');
+    
+    // Initialize scale factors
+    let scaleX = 1;
+    let scaleY = 1;
+
+    // If there is a transform applied
+    if (computedStyle && computedStyle !== 'none') {
+        // Extract the scale factors from the matrix
+        const matrixValues = computedStyle.match(/matrix\(([^)]+)\)/);
+        if (matrixValues) {
+            const values = matrixValues[1].split(', ');
+            scaleX = parseFloat(values[0]); // Scale X is the first value
+            scaleY = parseFloat(values[3]); // Scale Y is the fourth value
+        }
+    }
+
+    console.log(scale, scaleX, scaleY);
+    return {
+        top: pos.top / scale,
+        left: pos.left / scale,
+        height: originalHeight * scaleY,
+        width: originalWidth   * scaleX,
+        transformScale: scaleX
+    };
 
 }
 
-var isDragging = false;
 
 // Function to execute when the page is fully loaded
 function onPageLoaded() {
     console.log("Page loading completed. Executing your code...");
 
+    mouseBinds();
 
+    keyboardBinds();
+
+
+    
+    var draggable;
+    var offsetX, offsetY; // Variables to store the offset
+
+    // Function to handle the dragging (delegated event listener for multiple elements)
+    $(document).on('mousedown', '.draggable', function(e) {
+
+        // pulls the selected paper to front
+        console.log("Paper Z-Index: ", paperZIndex);
+        paperZIndex += 1;
+        if (paperZIndex > 1000) {paperZIndex = 5}
+        $(this).css('z-index', paperZIndex);
+
+
+    if (isDraggable(e)) {
+        isDragging = true;
+        e.stopPropagation();     
+        sound(choose(["paper-dragstart0.wav", "paper-dragstart1.wav", "paper-dragstart2.wav"]));
+        
+        // remove text selection and cursor
+        $('body').css('user-select', 'none');
+        // $('body').css('cursor', 'none');
+        window.getSelection().removeAllRanges();
+        
+        getScaleFactor();
+        var element = $(this);
+        draggable = element;
+        paperScale = getScaledDimensions(draggable).transformScale;
+        offsetX = (e.clientX / scale  - element.position().left / scale)  / paperScale;
+        offsetY = (e.clientY / scale  - element.position().top  / scale)  / paperScale;
+
+        $(document).on('mousemove', function(e) {
+            if (isDragging) {
+                
+                smol = 640 > e.clientX;
+                draggable.toggleClass('visa-smol', smol)
+                paperScale = getScaledDimensions(draggable).transformScale;
+
+                let newLeft = e.clientX / scale - offsetX  * paperScale;
+                let newTop =  e.clientY / scale - offsetY  * paperScale;
+                
+                if (newLeft > PaperBorderRight ) newLeft = PaperBorderRight;
+                if (newLeft < PaperBorderLeft ) newLeft = PaperBorderLeft;
+                if (newTop + element.height()  < PaperBorderTop ) newTop = PaperBorderTop - element.height();
+                if (newTop  > PaperBorderBottom ) newTop = PaperBorderBottom;
+
+                // Apply the scaling to the movement
+                draggable.css({
+                    top:  newTop   + 'px',
+                    left: newLeft   + 'px',
+                    position: 'absolute'
+                });
+              
+               
+            }
+        });
+     }
+    });
+
+    $(document).on('mouseup', '.draggable', function() {
+        sound(choose(["paper-dragstop0.wav", "paper-dragstop1.wav", "paper-dragstop2.wav"]));
+        tryGiveVisa();
+        
+
+    });
+
+    // End dragging when mouse button is released
+    $(document).on('mouseup', function() {
+        isDragging = false;
+        $(document).off('mousemove');
+    
+        // Re-enable text selection
+        $('body').css('user-select', '');
+        $('body').css('cursor', '');
+
+ 
+    });
+
+    $(document).on('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+
+}
+
+function kurwa(){
+    e = getScaledDimensions($('#visa'));
+    console.log(e);
+}
+
+function mouseBinds(){
+      // Mouse
     $('#accept').mousedown(function() {
         pressStamp($(this), true);
     });
@@ -96,15 +303,10 @@ function onPageLoaded() {
     $('.stampButton').mouseup(function() {
         unpressStamp($(this));
     });
-    
+}
 
-
-    var keysdown = {};
-    
-    var isDragging = false;
-    var draggable;
-    var offsetX, offsetY; // Variables to store the offset
-
+function keyboardBinds() {
+        
     // keydown handler
     $(document).keydown(function(e){
 
@@ -143,202 +345,169 @@ function onPageLoaded() {
             next();
         }
         if (e.key == 'a') {
-            pressStamp($('#deny'), false);
+            pressStamp($('#accept'), true);
         }
         if (e.key == 'd') {
-            pressStamp($('#accept'), true);
+            pressStamp($('#deny'), false);
         }
 
     });
 
-    // keyup handler
     $(document).keyup(function(e){
     // Remove this key from the map
         delete keysdown[e.keyCode];
 
         if (e.key == 'a') {
-            unpressStamp( $('#deny'));
-        }
-        if (e.key == 'd') {
             unpressStamp( $('#accept'));
         }
+        if (e.key == 'd') {
+            unpressStamp( $('#deny'));
+        }
 
     });
 
-
-    
-    // Function to update the scale value dynamically from the transform property
+};
 
 
-    function isDraggable(e){
 
-        const hasVisaSmolParent = $(e.target).parents('.visa-smol').length > 0;
-        
-        if (hasVisaSmolParent) {
-            return true;
+function getScaleFactor() {
+    const transform = $('body').css('transform');
+    if (transform !== 'none') {
+        const values = transform.split('(')[1].split(')')[0].split(',');
+        scale = parseFloat(values[0]); // Extract the scale value
+    }
+}
+
+function choose(array){
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function fadeOutAudio(audio, duration) {
+    let fadeOutInterval = 50; // Milliseconds for each step
+    let steps = duration / fadeOutInterval; // Total steps for the fade out
+    let volumeStep = audio.volume / steps; // Amount to decrease volume in each step
+
+    let fadeOutTimer = setInterval(() => {
+        if (audio.volume > volumeStep) {
+            audio.volume -= volumeStep; // Decrease volume
+        } else {
+            audio.volume = 0; // Set to 0 to avoid going negative
+            clearInterval(fadeOutTimer); // Stop when volume reaches 0
+            audio.pause(); // Pause the audio
+            audio.currentTime = 0; // Reset to start
         }
-        
+    }, fadeOutInterval);
+    
+    setTimeout(function(){ 
+        audio.pause();
+    }, duration + 30);
+}
 
-        return !$(e.target).is('h6, p, span')
+
+function censorText(selector) {
+    const $element = $(selector);
+    
+    // Function to mask a bad word with only first and last letters visible
+    function maskWord(word) {
+        return word[0] + "*".repeat(word.length - 2) + word.slice(-1);
     }
 
-    // Function to handle the dragging (delegated event listener for multiple elements)
-    $(document).on('mousedown', '.draggable', function(e) {
-    if (isDraggable(e)) {
-        isDragging = true;
-        e.stopPropagation();     
+    // Function to replace bad words within a text string
+    function censorText(text) {
+        badWords.forEach(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi'); // Match case-insensitively and whole words only
+            text = text.replace(regex, match => maskWord(match));
+        });
+        return text;
+    }
 
-        $('body').css('user-select', 'none');
-        $('body').css('cursor', 'none');
-        window.getSelection().removeAllRanges();
-        
-        sound(choose(["paper-dragstart0.wav", "paper-dragstart1.wav", "paper-dragstart2.wav"]));
-
-// Getting a random value
-
-        getScaleFactor();
-        var element = $(this);
-        offsetX = (e.clientX - element.position().left / scale);
-        offsetY = (e.clientY - element.position().top  / scale);
-
-        
-        draggable = element;
-        // console.log("--------")
-        // console.log('maus' + e.clientX)
-        // console.log('offs' + offsetX)
-        // console.log('posx' + element.position().left)
-        // console.log('posx' + element.offset().left)
-    
-        // On mousemove, adjust the position based on the scaling factor
-        $(document).on('mousemove', function(e) {
-            if (isDragging) {
-                // Get the updated scale factor
-                getScaleFactor();
-                // Calculate new position
-                let newLeft = e.clientX - offsetX;
-                let newTop =  e.clientY - offsetY;
-                
-                console.log(newLeft);
-                if (newLeft > PaperBorderRight ) newLeft = PaperBorderRight;
-                if (newLeft < PaperBorderLeft ) newLeft = PaperBorderLeft;
-                if (newTop + element.height()  < PaperBorderTop ) newTop = PaperBorderTop - element.height();
-                if (newTop  > PaperBorderBottom ) newTop = PaperBorderBottom;
-
-
-                
-                // Apply the scaling to the movement
-                draggable.css({
-                    top:  newTop   + 'px',
-                    left: newLeft   + 'px',
-                    position: 'absolute'
-                });
-
-                
-
-                border = 600 - draggable.width() / 2; 
-                smol = border > newLeft
-                draggable.toggleClass('visa-smol', (smol))
-                smolscale = smol ? 0.3 : 1.0;         
-               
+    // Recursive function to traverse and censor text nodes
+    function traverseAndCensor(element) {
+        element.contents().each(function() {
+            if (this.nodeType === Node.TEXT_NODE) {
+                // Replace text content if it’s a text node
+                this.nodeValue = censorText(this.nodeValue);
+            } else {
+                // Recursively handle child elements
+                traverseAndCensor($(this));
             }
         });
-     }
-    });
-    
-    // End dragging when mouse button is released
-    $(document).on('mouseup', function() {
-        isDragging = false;
-        $(document).off('mousemove');
-    
-        // Re-enable text selection
-        $('body').css('user-select', '');
-        $('body').css('cursor', '');
+    }
 
-
-        const visa = $('#visa')[0].getBoundingClientRect();
-        const background = $('#boothbackground')[0].getBoundingClientRect();
-
-        const isWithinBounds =
-            visa.right <= background.right &&
-            visa.bottom <= background.bottom;
-
-        if (isWithinBounds){
-            finalize();
-        }
-    });
-
-    // Optional: Prevent default behavior when dragging
-    $(document).on('dragstart', function(e) {
-        e.preventDefault();
-    });
-
-    $(DragablePapers).on('mousedown', function(e) {
-        console.log(paperZIndex);
-        console.log("BUUUUUUUH");
-        paperZIndex += 1;
-        if (paperZIndex > 1000) {paperZIndex = 5}
-        $(this).css('z-index', paperZIndex);
-    });
-
-    $(DragablePapers).on('mouseup', function(e) {
-        sound(choose(["paper-dragstop0.wav", "paper-dragstop1.wav", "paper-dragstop2.wav"]));
-    });
-
-    // Apply the "draggable" class to any elements you want to be draggable
-    $(DragablePapers).addClass('draggable');
-    $(AppealMessage).addClass('draggable');
-    // Example for multiple elements: $('.unban-requester-message').find('h6').addClass('draggable');
-    
-
+    // Start the recursive censoring process
+    traverseAndCensor($element);
 }
 
 
 
+function tryGiveVisa(){
+   
+    if (!isVisaStamped()) return; 
 
-function setAvatars() {
-    originalAvatarSrc = $('.hGPSMP').find('.tw-image-avatar').attr('src');
+    const visa = $('#visa')[0].getBoundingClientRect();
+    const background = $('#boothbackground')[0].getBoundingClientRect();
+
+    const isWithinBounds =
+        visa.right  <= background.right &&
+        visa.bottom <= background.bottom;
+
+    if (isWithinBounds){
+        $('#visa').css({  left: '1300px', top:  '1080px'})
+        sound('givetake-swish.wav');
+        finalize();
+    }
+}
+
+
+function isDraggable(e){
+
+    const hasVisaSmolParent = $(e.target).parents('.visa-smol').length > 0;
     
-
-    var src = "";
-    var switchsrc = "";
-    if (streamerMode) {
-        // Generate a random index and set a new avatar
-        const randomIndex = Math.floor(Math.random() * 103);
-        src = uri + `res/img/pfps/${randomIndex}.webp`;
-        switchsrc = uri + 'res/img/ShutterSwitchDown.png'
-    } else {
-        // Revert to the original avatar
-        src = originalAvatarSrc
-        switchsrc = uri + 'res/img/ShutterSwitchUp.png'
+    if (hasVisaSmolParent) {
+        return true;
     }
 
+    return !$(e.target).is('h6, p, span')
+}
+
+
+function setAvatars() {
+    // Get OG avatar from the sidebar
+    originalAvatarSrc = $('.hGPSMP').find('.tw-image-avatar').attr('src');
+    var src = "";
+    var switchsrc = "";
+
+    if (streamerMode) { // censored
+        const randomIndex = Math.floor(Math.random() * 103);
+        src         = uri + `res/img/pfps/${randomIndex}.webp`;
+        switchsrc   = uri + 'res/img/ShutterSwitchDown.png'
+    } else { // original
+        src         = originalAvatarSrc
+        switchsrc   = uri + 'res/img/ShutterSwitchUp.png'
+    }
+
+    // set the images
     $('#shutterSwitch img').attr('src', switchsrc);
     $('#personAvatar').attr('src', src);
-    console.log("Original avatar:",  src);
     
+    // Generate a static image of the potentially animated avatar
     var img = document.getElementById('personAvatar');
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
-    console.log("Original avatar:",  src);
     
-    // Ensure the image is loaded before drawing
     img.onload = function() {
         
-        // Reset canvas dimensions
-        canvas.width = img.naturalWidth; // Use naturalWidth for original size
-        canvas.height = img.naturalHeight; // Use naturalHeight for original size
-        // Draw the first frame of the animated WebP onto the canvas
-        context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before drawing
-        var kurwa = document.getElementById('personAvatar');
-        var src = kurwa.getAttribute('src'); // Get the 'src' attribute
-        console.log("eeeeee: ", src); // Logs the source URL of the image
+        // Reset canvas 
+        canvas.width = img.naturalWidth;   
+        canvas.height = img.naturalHeight; 
+        context.clearRect(0, 0, canvas.width, canvas.height); 
 
+        var kurwa = document.getElementById('personAvatar');
+        var src = kurwa.getAttribute('src'); 
         context.drawImage(kurwa, 0, 0);
 
-        // Convert the canvas to a data URL (static image)
         var staticImageURL = canvas.toDataURL('image/webp');
 
-        // Update the <img> source with the static image
         $('#unban-request-details').find('.tw-image-avatar').attr('src', staticImageURL);
 
     };
@@ -349,39 +518,6 @@ function setAvatars() {
     }
 
 }
-
-
-// Function to start observing the DOM for changes
-function startObserving() {
-    const targetNode = document.getElementById('root');
-    
-    // Options for the observer (which mutations to observe)
-    const config = { attributes: true, childList: true, subtree: true };
-
-    // Callback function to execute when mutations are observed
-    const callback = function(mutationsList) {
-        for (let mutation of mutationsList) {
-            // Check if the data-a-page-events-submitted attribute is added
-
-            if (mutation.type === 'attributes' && mutation.attributeName === 'data-a-page-events-submitted') {
-                if ( $('#unban-request-details') ){
-                    onPageLoaded();
-                    observer.disconnect(); // Stop observing once the attribute is detected
-                    break; // Exit loop after executing your code
-                }
-            }
-        }
-    };
-
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(callback);
-
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, config);
-}
-
-// Start observing immediately
-startObserving();
 
 
 
@@ -395,23 +531,14 @@ function sound(filename, delay=0, loop=false){
     setTimeout(function(){ 
         audio.play();
     }, delay);
-    
 }
 
-function pressModComment () {
-    const buttonsArray = $('.unban-requests-list-item').find('button').toArray();
-
-    // Log the array of button elements
-    console.log(buttonsArray);
-
-}
 
 function stampsToggle () {
     $('#stamps').toggleClass('stamp-hide');
     sound('stampbar-open.wav')
-
-    
 }
+
 
 function twitchClickDenyUnban(unban=true){
     
@@ -436,7 +563,7 @@ function twitchClickDenyUnban(unban=true){
 }
 
 
-function userCard(){
+function toggleUserCard(){
     $('.unban-requests-item-header__title .bNYaHs.tw-link').click();
 }
 
@@ -456,127 +583,178 @@ function unpressStamp(obj){
     obj.css('transform', 'translateY(0px)');
 }
 
-var personUnban = false;
 
 function stamp(unban){
 
     personUnban = unban;
     twitchClickDenyUnban(unban);   
-    image = unban  ? uri + 'res/img/InkApproved.png' : uri + 'res/img/InkDenied.png';
+    image = unban  ? uri + 'res/img/InkApproved.png' : uri + 'res/img/InkDenied.png' ;
+    
+    // stamping center position 
+    x = unban ?  1105 : 1460 ;  
+    y = 560;                   
+    
+    // Visa position
+    const paperOffset = $('#visa').position(); // Get the offset of the paper
+    
+    // Calculate the resulting stamp coordinates
+    getScaleFactor();
+    const adjustedX = x  - paperOffset.left /scale; // Adjust X by the paper's left offset
+    const adjustedY = y  - paperOffset.top  /scale;    // Adjust Y by the paper's top offset
 
-        
-        getScaleFactor();
-        
-        x = unban ? 1460 : 1105 ; // X coordinate where you want to stamp
-        y = 560; // Y coordinate where you want to stamp
+    // Calculate randomness to stamp's position
+    jiterX = Math.floor(Math.random() * 6) -  3  ;
+    jitterY = Math.floor(Math.random() * 6) - 3  ;
+    brightness = 1 - Math.random() / 3 ;
 
-        // Get the offset of the paper
-        const paperOffset = $('#visa').position(); // Get the offset of the paper
+    // Create the image element
+    const imgElement = $('<img />', {
+        src: image, // Image URL
+        class: 'stampInk',
+        css: {
+            position: 'absolute',
+            left: jiterX + adjustedX + 'px',      
+            top: jitterY + adjustedY + 'px',
+            filter: `brightness(${brightness})`
+        }
+    });
 
-        // Calculate the adjusted coordinates
-        const adjustedX = x  - paperOffset.left /scale; // Adjust X by the paper's left offset
-        const adjustedY = y  - paperOffset.top  /scale;    // Adjust Y by the paper's top offset
+    // Append the image to visa 
+    $('#visa').append(imgElement);
 
-
-        jiterX = Math.floor(Math.random() * 6) -  3  ;
-        jitterY = Math.floor(Math.random() * 6) - 3  ;
-        brightness = 1 - Math.random() / 3 ;
-
-        // Create the image element
-        const imgElement = $('<img />', {
-            src: image, // Image URL
-            class: 'stampInk',
-            css: {
-                position: 'absolute',
-                left: jiterX + adjustedX + 'px',      
-                top: jitterY + adjustedY + 'px',
-                filter: `brightness(${brightness})`
-            }
-        });
-
-        // Append the image to the paper (or any parent container)
-        $('#visa').append(imgElement);
+    console.log(isVisaStamped());
 }
 
+// send the person away, banning/unbanning them, clear all papers
 function finalize() {
     
-    if ($('.stampInk').length == 0) return;
+    // wait for person animation to finish
+    setTimeout( function (){
+        occupied = false;
+    }, 2000);
 
-    occupied = false;
     if (personUnban) {
         leave('right');
     }else{
         leave('left');
     }
 
-    $(ResolutionDiv).addClass('remove');
-    $('#appeal').addClass('remove');
+    $('#unban-request-details, #appeal').addClass('remove');
     $('#stamps').addClass('stamp-hide');
-
-    $(ResolutionTextArea).val($('#resolutionNote').val());
-    resetVisa();
-
-}
-
-function resetVisa(){
-    
     $('textarea').blur(); 
     
-    $('#visa').css({
-        position: 'absolute', // Ensures it can be positioned
-        left: '1300px',
-        top:  '1080px'
+    $(ResolutionTextArea).val($('#resolutionNote').val());
+
+    shouldEnd();
+}
+
+function isVisaStamped() {
+    if ($('.stampInk').length == 0){
+        console.log('no inks!');
+        return false;
+
+    } 
+    
+    const visa = $('#visa');
+    const visaOffset = visa.offset();
+    visaTransformed = getScaledDimensions(visa);
+    const visaWidth = visaTransformed.width
+    const visaHeight = visaTransformed.height;
+
+    let isWithin = false;
+
+    $('.stampInk').each(function() {
+        const stampInk = $(this);
+        const stampInkOffset = stampInk.offset();
+        stampInkTransformed = getScaledDimensions(stampInk);
+        const stampInkWidth = stampInkTransformed.width
+        const stampInkHeight = stampInkTransformed.height
+
+        console.log(stampInkOffset.left, stampInkWidth)
+        console.log(visaOffset.left, visaWidth)
+
+        // Check if stampInk is within the bounds of visa
+        const withinX = (
+            stampInkOffset.left < visaOffset.left + visaWidth &&
+            stampInkOffset.left + stampInkWidth > visaOffset.left
+        );
+        const withinY = (
+            stampInkOffset.top < visaOffset.top + visaHeight &&
+            stampInkOffset.top + stampInkHeight > visaOffset.top
+        );
+
+        if (withinX && withinY) {
+            isWithin = true;
+            return; // Break out of the .each loop
+        }
     });
 
-    $('.stampInk').remove();
-    $('#visa').removeClass('visa-smol');
-
-
+    console.log("wewe: ", isWithin)
+    return isWithin;
 }
+
 
 
 function resetPapers(){
 
     $(DragablePapers).addClass('draggable');
 
-    $('#visa').animate({
-        top: '930px'    // Move down
-    }, {
-        duration: 1000, // Duration in milliseconds
-        easing: 'linear' // Linear easing
-    });
+    
+    // reset visa and the textarea in it, remove stamps
+    setTimeout(function() {
+        sound('paper-spit.wav', 100);
+        $('#resolutionNote').val('');
+        $('.stampInk').remove();
+        $('#visa').removeClass('remove');
+        $('#visa').removeClass('visa-smol');
+        $('#visa')
+            .css({  left: '1300px', top:  '1080px'})
+            .animate({top: '930px'}, 500);     
+    }, 500);
 
-    $('#resolutionNote').val('');
-
+    // reset the yellow appeal
     setTimeout(function() {
         $('#appeal').addClass('visa-smol');
         $('#appeal').removeClass('remove');
-        $(DragablePapers).addClass('draggable');
 
         $('#appeal p').html($('.unban-requester-message h6').html());
+        censorText("#appeal");
 
-        $('#appeal').css({
-          'top': '650px',
-          'left': '300px',
-        });
+        $('#appeal')
+            .css({'top': '650px', 'left': '300px', })
+            .animate({ top: '730px'}, 300)  
+
       }, 3000); // Delay in milliseconds
 
-    $('#appeal').delay(3001)
-    .animate({
-        top: '730px'    // Move down
-    }, {
-        duration: 300, // Duration in milliseconds
-        easing: 'linear' // Linear easing
-    });
-
-    $('.kndAiU').addClass('show');
-    $('.kndAiU').removeClass('remove');
+    // reset the details with messages
+    $('.kndAiU').removeClass('show');
+    
 
 
-    sound('printer-feed.wav', 1666)
-    sound('printer-feed.wav', 2332)
-    sound('printer-feed.wav', 2998)
-    sound('printer-tear.wav', 3350)
+    setTimeout(function() {
+        
+        $('.kndAiU').addClass('show');
+        $('.kndAiU').removeClass('remove');
+    
+        $('#unban-request-details')
+            .css({ top: '1140px' }) 
+            .animate({ top: "-=200px" }, 300, function() {sound('printer-feed.wav', 0);  })
+            .delay(333)
+            .animate({ top: "-=200px" }, 300, function() {sound('printer-feed.wav', 0);  })
+            .delay(333)
+            .animate({ top: "-=200px" }, 300, function() {sound('printer-feed.wav', 0);  })
+            .delay(333)
+            .animate({ top: "-=200px" }, 300, function() {sound('printer-tear.wav', 0);  })
+
+        $(DragablePapers).addClass('draggable');
+        twitchClickDenyUnban(false);
+        censorText("#unban-request-details");
+
+        
+    }, 2000); // Delay in milliseconds
+    sound('speech-inspector.wav', 2500);
+
+
 
 }
 
@@ -587,6 +765,7 @@ function next (){
     traveller_index += 1;
     
     const buttonsArray = $('.unban-requests-list-item').find('button').toArray();
+
 
     if (buttonsArray.length > traveller_index){
 
@@ -605,18 +784,23 @@ function next (){
         // show papers
         button.click();
         resetPapers();
-
+        
         setTimeout(function() {
+            twitchClickDenyUnban(false);
             setAvatars();
         }, 500);
 
 
-        
 
+        if (buttonsArray.length - 1 == traveller_index){
+            sound('border-foghorn.wav', 5000);
+            lastTraveller = true;
 
+        }
         
     }else{
-        traveller_index = buttonsArray.length - 1;
+        // traveller_index = buttonsArray.length - 1;
+        occupied = true;
     }
 
     console.log(traveller_index);
@@ -625,31 +809,61 @@ function next (){
 
 
 
+function personStep(){
+    $("#person")
+        .animate({  top: '+=10px'}, 300)
+        .animate({  top: '-=10px'}, 300)
+        .animate({  top: '+=10px'}, 300)
+        .animate({  top: '-=10px'}, 300)
+        .animate({  top: '+=10px'}, 300)
+        .animate({  top: '-=10px'}, 300)
+        .animate({  top: '+=10px'}, 300)
+        .animate({  top: '-=10px'}, 300)
+        .animate({  top: '+=10px'}, 300)
+        .animate({  top: '-=10px'}, 300)
+}
+
 function walk_in (){
     const walke = $('<img>', {
         class: 'walk_in',
         src: uri + 'res/img/walk_in.png?' + new Date().getTime()
     }).appendTo('#sus');
-    
-    
-    
-       $('#person').removeClass( "personStationary" );
-       $('#person').addClass( "personMoveIn" ).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function(){
-           $('#person').addClass( "personStationary" );
-           $('#person').removeClass( "personMoveIn" );
-       });
+
     setTimeout(function() {
-        // walke.remove(); // Completely remove the image element
+        walke.remove(); // Completely remove the image element
     }, 2500);
+    
+    $("#person")
+        .css({ left: '-400px', filter: 'brightness(0.2)', top: '90px' })
+        .animate(
+            { left: '200px' }, 
+            { duration: 3000, queue: false, complete: function() {
+                $("#person").css("filter", "brightness(1.0)"); 
+                $("#person").addClass("personBreathing");
+            }}
+        );
+
+    personStep();
+ 
+   
 }
 
 function leave(dir='left'){
-    $('#person').removeClass( "personStationary" );
+
+    $("#person").removeClass("personBreathing");
+    personStep();
 
     if(dir==='left') {
-        $('#person').addClass( "personLeaveLeft" ).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function(){
-            $('#person').removeClass( "personLeaveLeft" );
-        });
+
+        $("#person")
+            .css({ filter: 'brightness(0.2)', top: '90px' })
+            .animate(
+                { left: '-400px' }, 
+                { duration: 3000, queue: false }
+            );
+
+
+    
 
         var buh;
         setTimeout(function() {
@@ -666,9 +880,14 @@ function leave(dir='left'){
 
 
     }else if (dir==='right'){
-        $('#person').addClass( "personLeaveRight" ).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function(){
-            $('#person').removeClass( "personLeaveRight" );
-        });
+        
+        
+        $("#person")
+            .css({ filter: 'brightness(0.2)', top: '90px' })
+            .animate(
+                { left: '800px' }, 
+                { duration: 3000, queue: false }
+            );
 
         const buh = $('<img>', {
             class: 'accept_walk',
@@ -692,6 +911,23 @@ function start() {
     // sound('booth-ambient.wav', 0, true)
 }
 
+function ending(){
+    $('#ending')
+        .css({display: 'block'})
+        .animate({opacity: '1'}, 500);     
+        
+    $(document).off("keydown");
+    sound('Victory.wav');
+}
+
+
+function shouldEnd(){
+    if (lastTraveller === true){
+        setTimeout( function(){
+            ending();
+        }, 2000);
+    }
+}
 
 
 
@@ -703,79 +939,6 @@ $('#buh').click(function() {
     
     // You can also perform other actions here, like loading content or changing styles
     // Example: $('#output').css('color', 'red');
-});
-
-
-
-// Usage: Load jQuery and then run your code
-loadjQuery(function() {
-    // Now jQuery is loaded and you can use it here
-    $(document).ready(function() {
-        const baseWidth = 1920;
-        const baseHeight = 1080;
-
-        // Function to scale the entire body element based on the current viewport
-        function scaleToFitViewport() {
-            const scaleX = window.innerWidth / baseWidth;
-            const scaleY = window.innerHeight / baseHeight;
-            const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
-
-            // Scale the body
-            $('body').css({
-                transform: 'scale(' + scale + ')',
-                width: baseWidth + 'px',
-                height: baseHeight + 'px',
-            });
-
-            // Center the body in the viewport (if necessary)
-            $('body').css({
-                left: (window.innerWidth - (baseWidth * scale)) / 2 + 'px',
-                top: (window.innerHeight - (baseHeight * scale)) / 2 + 'px',
-                position: 'absolute',
-            });
-        }
-
-        // Call the function initially
-        scaleToFitViewport();
-
-        // Recalculate scaling on window resize
-        $(window).resize(function() {
-            scaleToFitViewport();
-        });
-
-        console.log("jQuery has been loaded and is ready to use.");
-        
-        // Inject external HTML into #content div
-        const newDiv = $('<div id="sus"></div>').text('This is a dynamically created div!');
-        
-        // Inject external CSS by appending it to the head of the document
-        $('<link/>', {
-            rel: 'stylesheet',
-            type: 'text/css',
-            href: uri + 'style.css'
-        }).appendTo('head');
-      
-        // $('<link/>', {
-        //     rel: 'stylesheet',
-        //     type: 'text/css',
-        //     href: 'https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css'
-        // }).appendTo('head');
-        
-        newDiv.load(uri + 'content.html', function(data) {
-            // Replace __URL__ in the loaded content with the actual URL
-            const modifiedContent = data.replace(/URL/g, uri);
-            
-            // Set the modified content to the new div
-            newDiv.html(modifiedContent);
-        });
-
-        $('body').append(newDiv);
-        
-                
-
-
-
-    });
 });
 
 
