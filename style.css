@@ -14,21 +14,6 @@
     --color-text-alt-2: rgb(32, 32, 32);
 }
 
-@font-face {
-    font-family: 'papers';
-    src: url('https://flourek.github.io/unbanplease/res/papers.TTF') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-smooth: never;
-    -webkit-font-smoothing : none;
-}
-
-@font-face {
-    font-family: 'handwriting';
-    src: url('https://flourek.github.io/unbanplease/res/QEVRead.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
 /* #root {
     z-index: 5 !important;
@@ -62,7 +47,7 @@ body p:hover, h6:hover, span:hover {
 }
 
 body button:hover, .visa-smol:hover, a:hover {
-    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
+    cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto;
 }
 
 ::selection {
@@ -135,6 +120,7 @@ body button:hover, .visa-smol:hover, a:hover {
     right: 0px;
     object-fit: cover; 
     z-index: 2001;
+    height: 368px;
 }
 
 #border{
@@ -175,18 +161,60 @@ h5 {
 .bFxzAY{
     padding-bottom: 1rem;
 }
-/* 
+
+
+
 .iNjobR{
-    display: unset !important;
-} */
+    display: block !important;
+    height: 270px !important;
+    overflow: scroll;
+    border: 3px dotted gray;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 70px;
+    width: 522px !important;
+    padding: 0px !important;
+
+}
+
+.unban-requests-item-details{
+    overflow: visible !important;
+}
+
+.chat-line__message--deleted-detailed{
+    text-decoration: none !important;
+}
+
+/* 'deleted by flourek1g' */
+.dTXPRZ {
+    display: none !important;
+}
+
+/* colon after username */
+.vcml-message span:not([class]) {
+    color: black;
+}
 
 .viewer-card-mod-logs-comment-line:hover {
     background-color: rgb(224, 224, 224) !important;
 }
 
-.unban-requests-tabs__load-previous{
-    background: linear-gradient(180deg,#f3f3f3 40%,80%,#f3f3f300) !important;
-    padding-bottom: 0px !important;
+.unban-requests-tabs__load-previous
+{
+    display: none !important;
+}
+
+/* mod comments */
+.jxgvBz {
+    font-size: unset !important;
+}
+
+.text-fragment{
+    font-size: 16px !important;
+}
+
+.hfwpbT{
+    font-size: unset !important;
 }
 
 .no-drag {
@@ -367,7 +395,7 @@ h5 {
 #unban-request-details {
     position: absolute !important;
     /* margin-left: 20vw; */
-    top: 1080px;
+    top: 1120px;
     left: 700px ;
     width: 593px;
     height: 613px;
@@ -387,13 +415,6 @@ h5 {
     margin-bottom: 10px;
 }
 
-.iuoYrc {
-    display: none;
-}
-
-.jSkguG{
-    margin-left: 40%;
-}
 
 .loBtjK {
     position: fixed !important;
@@ -410,6 +431,9 @@ h5 {
 
 .kndAiU{
     display: none !important;
+    position: absolute !important;
+    overflow: visible !important;
+    margin-top: -50px;
 }
 
 .show {
@@ -477,6 +501,32 @@ h5 {
     }
 }
 
+#count {
+    position: absolute;
+    left: 649px;
+    top: 66px;
+    font-size: 39px !important;
+    z-index: 2003;
+    color: #b0b0b0;
+    background-color: #585858;
+    height: 33px;
+    width: 535px;
+}
+
+#countText {
+    font-size: 31px !important;
+    color: #b0b0b0;
+    position: absolute;
+    width: 300px;
+    top: -6px;
+    left: 8px;
+}
+
+
+
+
+
+
 
 .details-hidden {
     z-index: -1000 !important;
@@ -518,38 +568,63 @@ h5 {
     display: block;
     background-color: yellow;
     overflow: hidden !important;
+      overflow-y: hidden;
     transform-origin: top left;
     z-index: 5;
     color: black;
     left: 1050px;
     top: 1080px;
-    width: 445px;
-    height: 400px;
+    width: 423px;
+    height: 419px;
     min-height: 308px !important;
     overflow-y: scroll !important;
     background-color: rgb(235, 241, 150, 255) !important;
     -webkit-box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
-    -moz-box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
-    box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
+    -moz-box-shadow: -5px 5px 0px 1px rgb(182, 178, 126);
+    box-shadow: -3px 3px 0px 1px rgb(200, 194, 104);
     transform-origin: top left;
     border-left: none !important;
-    /* animation-delay: 1s; */
+    animation-delay: 1s;
 }
 
 #appealGrab {
     position: fixed;
     display: block;
-    width: 445px;
-    height: 38px;
-    border-bottom: 1px gray solid;
-    background-color: rgb(155, 147, 41);
+    width: 423px;
+    height: 65px;
+    border-bottom: 3px #939069 dotted;
+    background-color: rgb(235, 241, 150, 255);
+    padding: 6px;
+    --base-rem-unit: ;
 }
 
-#appeal p {
-    margin-top: 30px;
+#appealGrab div {
+    font-size: 18px !important;
+    color: #645d23 !important;
+}
+
+#appealGrab button {
+    position: absolute;
+    font-size: 18px !important;
+    color: #645d23 !important;
+    right: 29px;
+    top: 16px;
+}
+
+#appealGrab button img:hover {
+    background-color: #645d2352;
+}
+
+#appealContent {
+    margin-top: 55px;
     padding: 1rem;
-    font-family: 'handwriting' !important; 
     font-size: 36px !important;
+}
+
+#appealContent .word {
+    font-size: 36px !important;
+    color: inherit !important;
+    font-family: inherit !important;
 }
 
 /* resolution message and submit */
@@ -563,7 +638,7 @@ h5 {
     overflow: hidden !important;
     transform-origin: top left !important;
     z-index: 5;
-    mask-image: url('https://flourek.github.io/unbanplease/res/img/visa.png');
+    mask-image: url('http://127.0.0.1:5500/res/img/visa.png');
     mask-repeat: no-repeat;
     mask-size: cover;
 }
@@ -808,23 +883,62 @@ h5 {
 
 #logo {
     position: absolute;
+    display: none;
     width: 1920px;
     height: 1080px;
-    animation: bob 2.3s infinite ease-in-out;
+    animation: bob 2.1s infinite ease-in-out;
     z-index: 2001;
 }
 
-#ending {
+.lonk {
     position: absolute;
-    display: none;
-    background-color: #111111;
-    width: 1920px;
-    height: 1080px;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000 !important;
-    opacity: 0;
+    width: 60px;
+    height: 60px;
+    z-index: 5000;
+    top: 878px;
 }
+
+#githubLink{
+    left: 280px;
+}
+#twitterLink{
+    left: 360px;
+}
+#twitchLink{
+    left: 200px;
+}
+
+#streamlabsLink {
+    position: absolute;
+  color: #c13e29;
+  font-size: 30px !important;
+  z-index: 5000;
+  top: 969px;
+  left: 135px;
+}
+
+#ending {
+    display: none;
+    position: absolute;
+    background-color: black;
+    width: 1920px;
+    height: 1080px !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Fullscreen height */
+    text-align: center; /* Center text inside the h1 */
+    z-index: 4000;
+    opacity: 0;
+    transform: opacity 3s linear;
+}
+#ending h1 {
+    font-size: 60px !important;
+}
+#ending img {
+    width: 300px;
+}
+
 
 
 #userCardButton {

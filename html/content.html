@@ -2,12 +2,17 @@
 <div class="black-screen">
     <img id="splash" src="URL/res/img/splash.png" alt="">
     <img id="logo" src="URL/res/img/splashlogo.png" alt="">
-    <!-- <h3>Made by Flourek</h3> -->
+    <a id="githubLink" class="lonk" href="https://github.com/Flourek/" target="_blank"></a>
+    <a id="twitterLink" class="lonk" href="https://x.com/flourek_" target="_blank"></a>
+    <a id="twitchLink" class="lonk" href="https://www.twitch.tv/flourek1g" target="_blank"></a>
+    <a id="streamlabsLink"  href="https://streamlabs.com/flourek1g/tip" target="_blank">streamlabs.com/flourek1g</a>
     <button class="" onclick="start()"></button>
 </div>
 
 <div id="ending">
-    <h1>YOU WON I GUESS IDK</h1>
+    <h1>SHIFT ENDED</h1>
+    <h1>NO MORE APPEALS</h1>
+    <img src="https://cdn.7tv.app/emote/01J5FP7KFG000C7EVR3PVWBBXS/4x.webp" alt="">
 </div>
 
 
@@ -17,7 +22,7 @@
         
         <div id="black-bars" class="no-drag"></div>
         <img id="background" class="no-drag" src="URL/res/img/deskbackground.png" alt="">
-        <!-- <img id="foreground" class="no-drag" src="URL/res/img/foreground.png" alt=""> -->
+
         <img id="car" class="no-drag  " src="URL/res/img/car.png" alt="">
         <img id="border" class="no-drag" src="URL/res/img/border.png" alt="">
         
@@ -61,10 +66,21 @@
             <!-- <button id="buh" onclick="finalize()">Submit</button> -->
         </div>
         
- 
+        <div id="count">
+            <div id="countText">0/100</div>
+        </div>
+
         <div id="appeal" class="draggable">
-            <div id="appealGrab"></div>
-            <p>sampel text</p>
+            <div id="appealGrab">
+                <div>FORM: UNBAN APPEAL</div>
+                <div>STATE YOUR BUSINESS BELOW:</div>
+                <button onclick="setReadableFont()">
+                    <img src="URL/res/img/changeFont.png" alt="">
+                </button>
+            </div>
+            <p id="appealContent" >
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro velit, aperiam excepturi doloremque sunt temporibus reiciendis qui necessitatibus nihil corporis deleniti recusandae voluptatibus inventore ullam tempore eveniet dolorem ipsum nulla.
+             </p>
         </div>
         
     

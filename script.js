@@ -1,5 +1,5 @@
 
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('http://127.0.0.1:5500/');
 
 var traveller_index = -1;
 var occupied = false;
@@ -12,6 +12,9 @@ var keysdown = {};  // tracks which keyboard keys are currently held
 
 var streamerMode = false;
 var originalAvatarSrc;
+
+const baseWidth = 1920;
+const baseHeight = 1080;
 
 const UnbanDenyButton = '.cmxSxj';
 const ResolutionDiv = '.kndAiU';
@@ -53,8 +56,7 @@ function loadjQuery(callback) {
 // Inject custom scripts html and css
 loadjQuery(function() {
     $(document).ready(function() {
-        const baseWidth = 1920;
-        const baseHeight = 1080;
+
 
         // Function to scale the entire body element based on the current viewport
         function scaleToFitViewport() {
@@ -227,23 +229,29 @@ function onPageLoaded() {
         var element = $(this);
         draggable = element;
         paperScale = getScaledDimensions(draggable).transformScale;
-        offsetX = (e.clientX / scale  - element.position().left / scale)  / paperScale;
-        offsetY = (e.clientY / scale  - element.position().top  / scale)  / paperScale;
+        smolBorder = $("#boothbackground").offset().left +  $("#boothbackground").width() * scale
+
+        offsetX = (e.clientX - element.position().left ) / scale / paperScale;
+        offsetY = (e.clientY - element.position().top  ) / scale / paperScale;
 
         $(document).on('mousemove', function(e) {
             if (isDragging) {
                 
-                smol = 640 > e.clientX;
+                smol = smolBorder > e.clientX;
                 draggable.toggleClass('visa-smol', smol)
                 paperScale = getScaledDimensions(draggable).transformScale;
 
-                let newLeft = e.clientX / scale - offsetX  * paperScale;
-                let newTop =  e.clientY / scale - offsetY  * paperScale;
+                let newLeft = e.clientX / scale - offsetX * paperScale;
+                let newTop =  e.clientY / scale - offsetY * paperScale;
                 
                 if (newLeft > PaperBorderRight ) newLeft = PaperBorderRight;
                 if (newLeft < PaperBorderLeft ) newLeft = PaperBorderLeft;
                 if (newTop + element.height()  < PaperBorderTop ) newTop = PaperBorderTop - element.height();
                 if (newTop  > PaperBorderBottom ) newTop = PaperBorderBottom;
+
+                if(!smol){
+                    if (newLeft + $("#boothbackground").width() * scale < smolBorder ) newLeft = smolBorder;
+                }
 
                 // Apply the scaling to the movement
                 draggable.css({
