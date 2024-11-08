@@ -47,7 +47,7 @@ body p:hover, h6:hover, span:hover {
 }
 
 body button:hover, .visa-smol:hover, a:hover {
-    cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto;
+    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
 }
 
 ::selection {
@@ -638,7 +638,7 @@ h5 {
     overflow: hidden !important;
     transform-origin: top left !important;
     z-index: 5;
-    mask-image: url('http://127.0.0.1:5500/res/img/visa.png');
+    mask-image: url('https://flourek.github.io/unbanplease/res/img/visa.png');
     mask-repeat: no-repeat;
     mask-size: cover;
 }
