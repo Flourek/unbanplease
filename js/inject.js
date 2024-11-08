@@ -1,4 +1,4 @@
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('https://flourek.github.io/unbanplease');
 
 // Inject jQuery
 function loadjQuery(callback) {
