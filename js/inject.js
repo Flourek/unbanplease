@@ -57,7 +57,7 @@ function startObserving() {
 // actually inject the custom html and js after everything else has finished loading
 function onPageLoaded() {
 
-    $.get(uri + 'html/head.html', function(data) {
+    $.get(uri + '/html/head.html', function(data) {
         const modifiedContent = data.replace(/URL/g, uri);
         
         // Inject modified content directly into the head
@@ -67,7 +67,7 @@ function onPageLoaded() {
 
     const body = $('<div id="sus"></div>').text('This is a dynamically created div!');
     
-    body.load(uri + 'html/content.html', function(data) {
+    body.load(uri + '/html/content.html', function(data) {
         // Replace __URL__ in the loaded content with the actual URL
         const modifiedContent = data.replace(/URL/g, uri);
         
