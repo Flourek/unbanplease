@@ -54,6 +54,7 @@ function resetPapers(){
         $(DragablePapers).addClass('draggable');
         twitchClickDenyUnban(false);
         censorText("#unban-request-details");
+        $('.vcml-message').slice(0, -5).remove();
         // $('.iNjobR').scrollTop($('.iNjobR')[0].scrollHeight);
 
 
