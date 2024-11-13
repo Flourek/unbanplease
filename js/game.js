@@ -1,5 +1,5 @@
 
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('flourek.github.io/unbanplease/');
 
 var occupied = false;
 var lastTraveller = false;
@@ -13,7 +13,7 @@ var streamerMode = false;
 var originalAvatarSrc;
 
 var queue;  // js array of <button> found in the sidebar with the appeals
-var numberOfAppeals = getAppealsCount();
+var numberOfAppeals = 0;
 var appealsDenied = 0;
 var appealsAccepted = 0
 
@@ -163,8 +163,10 @@ function mouseBinds(){
     });
     
     
-    $('.stampButton').mouseup(function() {
-        unpressStamp($(this));
+    $(document).mouseup(function() {
+        $('.stampButton').each(function() {
+            unpressStamp($(this));
+        });
     });
 }
 
@@ -526,8 +528,6 @@ function stamp(unban){
 
     // Append the image to visa 
     $('#visa').append(imgElement);
-
-    console.log(isVisaStamped());
 }
 
 // send the person away, banning/unbanning them, clear all papers
@@ -607,14 +607,13 @@ function getAppealsCount(){
 }
 
 function updateCounter(){
-    const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} A:${appealsAccepted} D:${appealsDenied}`;
+    const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} | Accepted: ${appealsAccepted} | Denied: ${appealsDenied}`;
     $('#countText').html(result);
 }
 
 
 function next (){
     if (occupied) return;
-    if(numberOfAppeals == 0) { ending(); return };
 
     appealsDone = appealsDenied + appealsAccepted;
     

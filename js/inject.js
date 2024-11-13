@@ -1,20 +1,22 @@
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('flourek.github.io/unbanplease/');
 
-// Inject jQuery
 function loadjQuery(callback) {
     var script = document.createElement('script');
     script.src = "https://code.jquery.com/jquery-3.7.1.js";  // URL of jQuery CDN
     script.type = 'text/javascript';
-    //  When jQuery is loaded, execute the callback
-     
-     var scripte = document.createElement('script');
-     scripte.src = "https://code.jquery.com/ui/1.14.0/jquery-ui.js";  // URL of jQuery CDN
-     scripte.type = 'text/javascript';
-     
-     document.head.appendChild(script);  // Append script to head
-     document.head.appendChild(scripte); 
-     scripte.onload = callback; 
+    
+    // When jQuery is loaded, load jQuery UI
+    script.onload = function() {
+        var scripte = document.createElement('script');
+        scripte.src = "https://code.jquery.com/ui/1.14.0/jquery-ui.js";  // URL of jQuery UI CDN
+        scripte.type = 'text/javascript';
+        scripte.onload = callback;  // When jQuery UI is loaded, execute the callback
+        document.head.appendChild(scripte);
+    };
+    
+    document.head.appendChild(script);  // Append jQuery script to head
 }
+
 
 // Entry point
 loadjQuery(function() {
