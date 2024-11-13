@@ -4,13 +4,13 @@
 // @namespace	UnbanPlease
 //
 // @version		1.0.1
-// @updateURL	flourek.github.io/unbanplease/injector.user.js
+// @updateURL	https://flourek.github.io/unbanplease/res/icon.png/injector.user.js
 //
 // @description	Turns your twitch unban appeals into a Papers Please themed game!!!
-// @icon		flourek.github.io/unbanplease/res/icon.png
+// @icon		https://flourek.github.io/unbanplease/res/icon.png/res/icon.png
 //
 // @include		https://www.twitch.tv/popout/moderator/*/unban-requests?papers
-// @require https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js
+// @require 	https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js
 //
 // @grant		none
 // @run-at		document-end
@@ -22,7 +22,7 @@ function init()
 
 	script.id = 'unbanpls_inject';
 	script.type = 'text/javascript';
-	script.src = 'flourek.github.io/unbanplease/js/inject.js';
+	script.src = 'https://flourek.github.io/unbanplease/res/icon.png/js/inject.js';
 !
 	document.head.appendChild(script);
 }

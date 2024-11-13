@@ -27,7 +27,7 @@
 } */
 
 body {
-    cursor: url('flourek.github.io/unbanplease/res/img/CursorArrow.png'), auto;
+    cursor: url('https://flourek.github.io/unbanplease/res/icon.png/res/img/CursorArrow.png'), auto;
     margin: 0;
     padding: 0;
     width: 1920px; /* Design for 1920px width */
@@ -54,7 +54,7 @@ body p:hover, h6:hover, span:hover {
 }
 
 body button:hover, .visa-smol:hover, a:hover {
-    cursor: url('flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
+    cursor: url('https://flourek.github.io/unbanplease/res/icon.png/res/img/CursorHand.png') 16 2, auto;
 }
 
 ::selection {
@@ -683,7 +683,7 @@ input::placeholder {
     overflow: hidden !important;
     transform-origin: top left !important;
     z-index: 5;
-    mask-image: url('flourek.github.io/unbanplease/res/img/visa.png');
+    mask-image: url('https://flourek.github.io/unbanplease/res/icon.png/res/img/visa.png');
     mask-repeat: no-repeat;
     mask-size: cover;
 }

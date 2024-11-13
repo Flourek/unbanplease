@@ -1,5 +1,5 @@
 
-var uri = new URL('flourek.github.io/unbanplease/');
+var uri = new URL('https://flourek.github.io/unbanplease/res/icon.png/');
 
 var occupied = false;
 var lastTraveller = false;
