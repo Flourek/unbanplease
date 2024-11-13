@@ -4,7 +4,7 @@
 // @namespace	UnbanPlease
 //
 // @version		1.0.1
-// @updateURL	https://flourek.github.io/unbanplease/res/icon.png/injector.user.js
+// @updateURL	https://flourek.github.io/unbanplease/injector.user.js
 //
 // @description	Turns your twitch unban appeals into a Papers Please themed game!!!
 // @icon		https://flourek.github.io/unbanplease/res/icon.png/res/icon.png
