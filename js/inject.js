@@ -1,4 +1,4 @@
-var uri = new URL('https://flourek.github.io/unbanplease/res/icon.png/');
+var uri = new URL('https://flourek.github.io/unbanplease/');
 
 function loadjQuery(callback) {
     var script = document.createElement('script');
