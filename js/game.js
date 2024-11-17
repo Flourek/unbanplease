@@ -711,7 +711,6 @@ function getAppealsCount(){
 
 function updateCounter(){
     const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} | Accepted: ${appealsAccepted} | Denied: ${appealsDenied}`;
-    alert(result);
     $('#countText').html(result);
 }
 
