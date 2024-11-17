@@ -10,6 +10,7 @@
 // @icon		http://127.0.0.1:5500/res/icon.png
 //
 // @include		https://www.twitch.tv/popout/moderator/*/unban-requests?papers
+// @require 	https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js
 //
 // @grant		none
 // @run-at		document-end

@@ -7,11 +7,18 @@
     --color-border-input-checkbox-checked: #e60000;
     --color-background-button-primary-active: #910303;
     --color-background-button-primary-hover:  #910303;
-    --color-background-input: rgb(224, 224, 224) ;
-    --color-background-input-focus: rgb(224, 224, 224) ;
+    --color-background-input: rgb(236, 236, 236) ;
+    --color-background-input-focus: rgb(236, 236, 236)  ;
     --color-border-input-focus: rgb(122, 122, 122);
     --color-text-input: rgb(32, 32, 32);
     --color-text-alt-2: rgb(32, 32, 32);
+    --color-fill-button-icon: rgb(122, 122, 122);
+    --color-fill-current: rgb(122, 122, 122);
+}
+
+* {
+    scrollbar-color: #00000062 #f1f1f100; /* Thumb color, Track color */
+    scrollbar-width: thin; /* Options: auto, thin, none */
 }
 
 
@@ -167,31 +174,38 @@ h5 {
     border: 2px rgb(87, 87, 87) solid;
 }
 
-.bFxzAY{
-    padding-bottom: 1rem;
-}
-
 
 
 .iNjobR{
-    display: block !important;
+    /* display: block !important; */
     height: 270px !important;
     overflow: scroll;
+    overflow-x: hidden;
     border: 3px dotted gray;
     margin-top: 10px;
     margin-left: 30px;
     margin-right: 70px;
     width: 522px !important;
-    padding: 0px !important;
+    padding: 10px 0px !important;
+}
 
+
+.iNjobR .simplebar-scroll-content {
+    overflow-y: scroll !important;
 }
 
 .unban-requests-item-details{
-    overflow: visible !important;
+    overflow: hidden !important;
+    height: 556px;
 }
 
 .chat-line__message--deleted-detailed{
     text-decoration: none !important;
+}
+
+.eFqEFL {
+    text-decoration: underline;
+    color: #7f93ff;
 }
 
 /* 'deleted by flourek1g' */
@@ -205,18 +219,50 @@ h5 {
 }
 
 .viewer-card-mod-logs-comment-line:hover {
-    background-color: rgb(224, 224, 224) !important;
+    background-color: rgb(245, 245, 245) !important;
 }
 
 .unban-requests-tabs__load-previous
 {
     display: none !important;
+    background: none !important;
+}
+
+.unban-requests-item-header__title {
+    pointer-events: none;
 }
 
 /* mod comments */
 .jxgvBz {
     font-size: unset !important;
 }
+
+.jNIlkd {
+    padding: 0rem !important;
+}
+
+.kLSvdo {
+    background: none !important;
+}
+
+.btsbQQ {
+    display: none !important;
+}
+
+input::placeholder {
+    color: #888888 !important; 
+}
+
+.targeted-mod-action > div {
+    border-top: 3px dotted #a9a9a9;
+    padding-top: 9px;
+}
+
+
+.targeted-mod-action span {
+    font-size: 16px !important;
+}
+
 
 .text-fragment{
     font-size: 16px !important;
@@ -250,11 +296,10 @@ h5 {
 }
 
 
-
-    
-
 .jUUWca { 
-    display: none !important
+    display: none !important;
+    /* display: block !important;
+    z-index: 5000; */
 } 
 
 
@@ -439,7 +484,7 @@ h5 {
 
 
 .kndAiU{
-    display: none !important;
+    /* display: none !important; */
     position: absolute !important;
     overflow: visible !important;
     margin-top: -50px;
@@ -523,11 +568,11 @@ h5 {
 }
 
 #countText {
-    font-size: 31px !important;
-    color: #b0b0b0;
+    font-size: 25px !important;
+    color: #939393;
     position: absolute;
-    width: 300px;
-    top: -6px;
+    width: 436px;
+    top: -1px;
     left: 8px;
 }
 

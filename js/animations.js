@@ -187,13 +187,13 @@ function applyHandwritingEffect() {
 
 function setRandomFont(element) {
     const fonts = [
-        'handwriting',
-        'QEAntonyLark',
-        'QEBradenHill',
-        'QECarolineMutiboko',
         'QEDaveMergens',
-        'QEGHHughes',
-        'QEHerbertCooper'
+        'handwriting',
+        // 'QEAntonyLark',
+        // 'QEBradenHill',
+        // 'QECarolineMutiboko',
+        // 'QEGHHughes',
+        // 'QEHerbertCooper'
     ];
 
 
@@ -210,6 +210,7 @@ function start() {
     $('.black-screen').addClass("black-screen-hide");
     fadeOutAudio(music, 1000);
     sound('booth-intro.wav');
+    numberOfAppeals=getAppealsCount()
     updateCounter();
     // sound('booth-ambient.wav', 0, true)
 }
