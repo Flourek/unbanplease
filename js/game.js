@@ -1,5 +1,5 @@
 
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('http://127.0.0.1:5500/');
 
 var occupied = false;
 var lastTraveller = false;
@@ -16,7 +16,7 @@ var queue;  // js array of <button> found in the sidebar with the appeals
 var numberOfAppeals = getAppealsCount();
 var appealsDenied = 0;
 var appealsAccepted = 0
-
+var sniping = false;
 
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -148,7 +148,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    // start();
+    start();
 });
 
 
@@ -161,12 +161,94 @@ function mouseBinds(){
     $('#deny').mousedown(function() {
         pressStamp($(this), false);
     });
-    
-    
+
     $('.stampButton').mouseup(function() {
         unpressStamp($(this));
     });
+
+    $('#borderContainer').mousedown(function() {
+        snipe();
+    });
+
+
 }
+
+
+function toggleAwpShelf(){
+    if ( $('#awp').hasClass('showAwp') ){
+        $('#awp').animate({right: '-510px'}, 400);
+        sound('stampbar-close.wav')
+    }else{
+        $('#awp').animate({right: '46px'}, 400);
+        sound('stampbar-open.wav')
+    }
+    $('#awp').toggleClass('showAwp');
+}
+
+function snipe(){
+    if (!sniping) return;
+    sound('AWP.wav');
+}
+
+function toggleAwpEquipped(){
+    if ( $('#awp').hasClass('awpEquipped') ){
+        $('#awp img').attr('src', uri + 'res/img/awpStored.png');
+        $('.travelerWalking, .travelerDead').removeClass('snipingCursor')
+        sound('rifle-keyinsert.wav')
+        sniping = false;
+    }else{
+        $('#awp img').attr('src', uri + 'res/img/awpEmpty.png');
+        $('.travelerWalking, .travelerDead').addClass('snipingCursor')
+        sound('rifle-cock.wav')
+        sniping = true;
+    }
+
+    $('#borderContainer').toggleClass('snipingCursor');
+    $('#awp').toggleClass('awpEquipped');
+}
+
+function spawnAcceptedTraveler(){
+
+    // Create the image element
+    const traveler = $('<div />', {
+        class: 'travelerWalking',
+        css: {
+            left: '700px',      
+            top: '270px'
+        }
+    });
+
+    $('#borderContainer').append(traveler);
+    
+    traveler.animate(
+        { left: '1500px' }, 
+        {
+            duration: 30000, // Animation duration in milliseconds
+            easing: 'linear', // Linear easing
+        }
+
+    ).animate({top: '350px'}, 300)
+    ;
+
+    traveler.mousedown(function() {
+        if(!sniping) return;
+        
+        const position = getScaledDimensions(traveler);
+
+        const travelerDead = $('<div />', {
+            class: 'travelerDead',
+            css: {
+                left: position.left,
+                top: position.top,
+            }
+        });
+        $('#borderContainer').append(travelerDead);
+
+        $(this).remove();
+    });
+}
+
+
 
 function keyboardBinds() {
         
@@ -203,7 +285,7 @@ function keyboardBinds() {
             e.preventDefault(); // Prevents the default space scroll behavior
             streamerMode = !streamerMode;
             setAvatars();
-            applyHandwritingEffect();
+            spawnAcceptedTraveler();
 
         }
         if (e.key == 's') {
