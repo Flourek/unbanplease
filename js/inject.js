@@ -1,4 +1,4 @@
-var uri = new URL('http://127.0.0.1:5500/');
+var uri = new URL('https://flourek.github.io/unbanplease/');
 
 function loadjQuery(callback) {
     var script = document.createElement('script');

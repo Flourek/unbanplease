@@ -160,15 +160,7 @@ function leave(dir='left'){
                 { duration: 3000, queue: false }
             );
 
-        const buh = $('<img>', {
-            class: 'accept_walk',
-            src: uri + 'res/img/accept_walk.png?' + new Date().getTime()
-        }).appendTo('#sus');
-        
-        // Set a timeout to remove the image after 30 seconds (30,000 milliseconds)
-        setTimeout(function() {
-            buh.remove(); // Completely remove the image element
-        }, 30000);
+        spawnAcceptedTraveler();
     }
 }
 

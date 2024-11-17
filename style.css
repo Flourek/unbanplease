@@ -27,7 +27,7 @@
 } */
 
 body {
-    cursor: url('http://127.0.0.1:5500/res/img/CursorArrow.png'), auto;
+    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorArrow.png'), auto;
     margin: 0;
     padding: 0;
     width: 1920px; /* Design for 1920px width */
@@ -39,7 +39,7 @@ body {
 }
 
 .snipingCursor{
-    cursor: url('http://127.0.0.1:5500/res/img/CursorScopeKill.png') 48 48, auto !important;
+    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorScopeKill.png') 48 48, auto !important;
 }
 
 .tw-root--hover body {
@@ -58,7 +58,7 @@ body p:hover, h6:hover, span:hover {
 }
 
 body button:hover, .visa-smol:hover, a:hover {
-    cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto;
+    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
 }
 
 ::selection {
@@ -683,23 +683,20 @@ input::placeholder {
 
 .travelerWalking{
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 39px;
     left: 700px;
-    background-color: pink;
     z-index: 2005;
     top: 260px;
+    cursor: inherit;
 }
 
-.travelerWalking:hover{
-    cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto;
-}
+/* .travelerWalking:hover{ */
+    /* cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto; */
+/* } */
 
 .travelerDead {
     position: absolute;
-    width: 50px;
-    height: 50px;
-    background-color: red;
+    width: 90px;
     z-index: 2004;
 }
 
@@ -714,7 +711,7 @@ input::placeholder {
     overflow: hidden !important;
     transform-origin: top left !important;
     z-index: 5;
-    mask-image: url('http://127.0.0.1:5500/res/img/visa.png');
+    mask-image: url('https://flourek.github.io/unbanplease/res/img/visa.png');
     mask-repeat: no-repeat;
     mask-size: cover;
 }
@@ -842,7 +839,7 @@ input::placeholder {
 
 #awp {
     position: absolute;
-    right: -510px;
+    right: -512px;
     top: 674px;
     z-index: 1000 !important;
 }

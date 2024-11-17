@@ -1,5 +1,5 @@
 
-var uri = new URL('http://127.0.0.1:5500/');
+var uri = new URL('https://flourek.github.io/unbanplease/');
 
 var occupied = false;
 var lastTraveller = false;
@@ -179,7 +179,7 @@ function mouseBinds(){
 
 function toggleAwpShelf(){
     if ( $('#awp').hasClass('showAwp') ){
-        $('#awp').animate({right: '-510px'}, 400);
+        $('#awp').animate({right: '-512px'}, 400);
         sound('stampbar-close.wav')
     }else{
         $('#awp').animate({right: '46px'}, 400);
@@ -191,6 +191,20 @@ function toggleAwpShelf(){
 function snipe(){
     if (!sniping) return;
     sound('AWP.wav');
+    
+    var $element = $("#borderContainer");
+    $element.css("filter", "brightness(100%)");
+
+    // Animate back to normal brightness (1) in 0.5 seconds
+    $({brightness: 5}).animate({brightness: 1}, {
+        duration: 330,
+        easing: 'linear',
+        step: function (now) {
+            // Update the filter property based on the current value of brightness
+            $element.css("filter", "brightness(" + now + ")");
+        }
+    });
+
 }
 
 function toggleAwpEquipped(){
@@ -211,15 +225,18 @@ function toggleAwpEquipped(){
 }
 
 function spawnAcceptedTraveler(){
+    
 
-    // Create the image element
-    const traveler = $('<div />', {
+    const traveler = $('<img />', {
+        src: uri + 'res/img/travellerWalking.gif?' + new Date().getTime(), // Image URL
         class: 'travelerWalking',
         css: {
-            left: '700px',      
-            top: '270px'
+            left: '690px',      
+            top: '280px'
         }
     });
+
+
 
     $('#borderContainer').append(traveler);
     
@@ -230,25 +247,29 @@ function spawnAcceptedTraveler(){
             easing: 'linear', // Linear easing
         }
 
-    ).animate({top: '350px'}, 300)
-    ;
+    ).animate({top: '400px'}, 2500);
 
     traveler.mousedown(function() {
         if(!sniping) return;
-        
         const position = getScaledDimensions(traveler);
-
-        const travelerDead = $('<div />', {
+        console.log(position.top + Math.floor(Math.random() * 30) - 15);
+        const travelerDead = $('<img />', {
+            src: uri + 'res/img/travellerDeath.webp?' + new Date().getTime(), // Image URL
             class: 'travelerDead',
             css: {
                 left: position.left,
-                top: position.top,
+                top: position.top + Math.floor(Math.random() * 30),
             }
         });
+    
         $('#borderContainer').append(travelerDead);
 
         $(this).remove();
     });
+
+    setTimeout(function() {
+        traveler.remove(); // Completely remove the image element
+    }, 40000);
 }
 
 
@@ -288,7 +309,6 @@ function keyboardBinds() {
             e.preventDefault(); // Prevents the default space scroll behavior
             streamerMode = !streamerMode;
             setAvatars();
-            spawnAcceptedTraveler();
 
         }
         if (e.key == 's') {
@@ -691,12 +711,18 @@ function getAppealsCount(){
 
 function updateCounter(){
     const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} | Accepted: ${appealsAccepted} | Denied: ${appealsDenied}`;
+    alert(result);
     $('#countText').html(result);
 }
 
 
 function next (){
     if (occupied) return;
+
+    if ($('.ieOTqj').length > 0) {
+        ending();
+        return;
+    } 
 
     appealsDone = appealsDenied + appealsAccepted;
     
