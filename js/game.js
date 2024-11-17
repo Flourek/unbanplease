@@ -148,7 +148,6 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    start();
 });
 
 
