@@ -144,6 +144,8 @@ body button:hover, .visa-smol:hover, a:hover {
 #borderContainer {
     height: 370px;
     clip-path: inset(0px 0px -3px 0px);
+    position: relative;
+    z-index: 2000;
 }
 
 
@@ -289,7 +291,7 @@ input::placeholder {
     content: " ";
     position: absolute;
     width: 80px;
-    height: 60px;
+    height: 50px;
     left: 590px;
     top: 250px;
     z-index: 10000;
@@ -297,11 +299,29 @@ input::placeholder {
 
 
 .jUUWca { 
-    display: none !important;
-    /* display: block !important;
-    z-index: 5000; */
+    /* display: none !important; */
+    /* display: block !important; */
+    /* z-index: 5000; */
 } 
 
+/*  sorting by oldest/newest */
+.jdozvI {
+    z-index: 2001 !important;
+    position: fixed;
+    top: 306px;
+    left: 571px;
+    height: 12px !important;
+}
+
+.jdozvI .tw-select {
+    background: none !important;
+    color: #aaa;
+    height: 23px;
+    width: 95px !important;
+    padding: 4px !important;
+    margin: 0px;
+    box-shadow: none;
+}
 
 
 
@@ -471,14 +491,20 @@ input::placeholder {
 
 
 .loBtjK {
-    position: fixed !important;
-    display: block !important;;
-    left: 12250px;
-    top: 12220px;
+    position: absolute !important;
+    display: block !important;
+    left: -25px;
+    top: -114px;
     width: 445px;
     height: 100px;
-    background-color: #0056b3;
-    z-index: 1000;
+    z-index: unset !important;
+}
+
+.loBtjK .jDgIal {
+    position: fixed;
+    top: 10000px;
+    left: 10000px;
+    z-index: -2000;
 }
 
 
@@ -578,10 +604,6 @@ input::placeholder {
 
 
 
-
-
-
-
 .details-hidden {
     z-index: -1000 !important;
 }
@@ -591,8 +613,8 @@ input::placeholder {
     font-size: 24px !important;
     position: fixed !important;
     display: block !important;;
-    left: 11050px;
-    top: 11150px;
+    left: 11550px;
+    top: 11550px;
     width: 445px;
     min-height: 308px !important;
     overflow-y: scroll !important;
@@ -606,7 +628,7 @@ input::placeholder {
     box-shadow: -5px 5px 0px 1px rgba(169, 161, 45, 1);
     transform-origin: top left;
     border-left: none !important;
-    z-index: -1000 !important;
+    z-index: 5000 !important;
     /* animation-delay: 1s; */
 
 }
@@ -690,6 +712,10 @@ input::placeholder {
     cursor: inherit;
 }
 
+.travelerDenied{
+    transform: scaleX(-1.0);
+}
+
 /* .travelerWalking:hover{ */
     /* cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto; */
 /* } */
@@ -739,14 +765,21 @@ input::placeholder {
 
 #unban-request-details.visa-smol {
     transform: scale(0.2) rotate(4deg);
+}
 
+.unban-requests-item-header__suspicious-user-flag {
+    position: absolute !important;
+    top: 73px;
+    left: 140px;
+    background: none !important;
+    color: black !important;
 }
 
 
 #visa textarea {
     margin: 20px;
-    top: 210px;
-    width: 353px !important;
+    top: 204px;
+    width: 347px !important;
     height: 142px;
     color: black;
     font-size: 18px !important;
@@ -754,9 +787,15 @@ input::placeholder {
     resize: none;
     padding: 10px;
     position: absolute;
-    left: 0;
+    left: 0px;
     border: none;
     outline: none;
+    border-radius: 0px !important;
+    box-shadow: none;
+}
+
+#visa textarea::placeholder{
+    color: #66484d;
 }
 
 #visa textarea:focus-visible   {
@@ -777,12 +816,12 @@ input::placeholder {
 }
 
 .gzFSTs {
-    position: fixed;
+    /* position: fixed; */
     display: block !important;
-    left: 267px;
-    top: 12080px;
+    left: 667px;
+    top: 580px;
+    z-index: 2000;
     width: 440px !important;
-    background-color: rgb(192, 246, 255);
 }
 
 

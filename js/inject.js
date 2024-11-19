@@ -77,6 +77,6 @@ function onPageLoaded() {
         body.html(modifiedContent);
     });
     
-    $('body').append(body);
+    $('#root').append(body);
 
 }

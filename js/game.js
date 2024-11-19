@@ -120,6 +120,16 @@ $(document).ready(function() {
                     left: newLeft   + 'px',
                     position: 'absolute'
                 });
+                
+                console.log(draggable.attr('id') );
+                if(draggable.attr('id') === "visa"){
+                    // $('.gzFSTs .eoboxF').css({
+                    //     top:  newTop    + 'px',
+                    //     left: newLeft   + 'px',
+                    //     position: 'fixed',
+                    //     'z-index':  paperZIndex
+                    // })
+                }
               
                
             }
@@ -235,9 +245,8 @@ function spawnAcceptedTraveler(){
         }
     });
 
-
-
     $('#borderContainer').append(traveler);
+    makeTravelerShootable();
     
     traveler.animate(
         { left: '1500px' }, 
@@ -247,17 +256,53 @@ function spawnAcceptedTraveler(){
         }
 
     ).animate({top: '400px'}, 2500);
+    
+    setTimeout(function() {
+        traveler.remove(); // Completely remove the image element
+    }, 40000);
+}
 
-    traveler.mousedown(function() {
+function spawnDeniedTraveller(){
+    
+    const traveler = $('<img />', {
+        src: uri + 'res/img/travellerWalking.gif?' + new Date().getTime(), // Image URL
+        class: 'travelerWalking travelerDenied',
+        css: {
+            left: '525px',      
+            top: '280px'
+        }
+    });
+
+    $('#borderContainer').append(traveler);
+    makeTravelerShootable();
+    
+    traveler.animate(
+        { left: '440px', top: '310px' }, {
+            duration: 2600, // Animation duration in milliseconds
+            easing: 'linear', // Linear easing
+        }
+
+    ).animate({left: '-100px'}, {
+        duration: 14000, // Animation duration in milliseconds
+        easing: 'linear', // Linear easing
+    });
+    
+    setTimeout(function() {
+        traveler.remove(); // Completely remove the image element
+    }, 13000);
+
+}
+
+function makeTravelerShootable(){
+    $('.travelerWalking').mousedown(function() {
         if(!sniping) return;
-        const position = getScaledDimensions(traveler);
-        console.log(position.top + Math.floor(Math.random() * 30) - 15);
+        const position = getScaledDimensions($(this));
         const travelerDead = $('<img />', {
             src: uri + 'res/img/travellerDeath.webp?' + new Date().getTime(), // Image URL
             class: 'travelerDead',
             css: {
                 left: position.left,
-                top: position.top + Math.floor(Math.random() * 30),
+                top: position.top + Math.floor(Math.random() * 20),
             }
         });
     
@@ -265,10 +310,6 @@ function spawnAcceptedTraveler(){
 
         $(this).remove();
     });
-
-    setTimeout(function() {
-        traveler.remove(); // Completely remove the image element
-    }, 40000);
 }
 
 
@@ -277,6 +318,7 @@ function keyboardBinds() {
         
     // keydown handler
     $(document).keydown(function(e){
+
 
         // Prevent typing in text area when using binds
         if (e.keyCode === 9 || isDragging) {
@@ -289,8 +331,9 @@ function keyboardBinds() {
         }
         
         // prevent stamping if typing in appeal response
-        if ($('textarea').is(':focus') && !isDragging){
+        if (($('textarea').is(':focus') || $('.tw-input').is(':focus'))  && !isDragging){
             sound(choose(["text-reveal0.wav", "text-reveal1.wav", "text-reveal2.wav", "text-reveal3.wav"]));
+            // $(ResolutionTextArea).val($('#resolutionNote').val());
             return;
         } 
 
@@ -448,9 +491,9 @@ function tryGiveVisa(){
         visa.bottom <= background.bottom;
 
     if (isWithinBounds){
-        $('#visa').css({  left: '1300px', top:  '1080px'})
         sound('givetake-swish.wav');
         finalize();
+        $('#visa').css({  left: '1300px', top:  '1080px'})
     }
 }
 
@@ -642,19 +685,21 @@ function finalize() {
 
     if (personUnban) {
         leave('right');
-    appealsAccepted += 1;
+        appealsAccepted += 1;
     }else{
         leave('left');
         appealsDenied += 1;
     }
 
+    
+    const element = document.querySelector(SendUnbanDecisionButton);
+    element.focus();
+    element.click(); 
+    
+    element.blur();
+    $('textarea').blur(); 
     $('#unban-request-details, #appeal').addClass('remove');
     $('#stamps').addClass('stamp-hide');
-    $('textarea').blur(); 
-    
-    // sends the actuall twitch unban
-    $(ResolutionTextArea).val($('#resolutionNote').val());
-    $(SendUnbanDecisionButton).click();
     
     updateCounter();
     shouldEnd();

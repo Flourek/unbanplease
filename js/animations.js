@@ -54,6 +54,9 @@ function resetPapers(){
         $(DragablePapers).addClass('draggable');
         twitchClickDenyUnban(false);
         censorText("#unban-request-details");
+        
+        var gzftbsContent = $('.loBtjK').detach();
+        $('#visa').append(gzftbsContent);
         // $('.iNjobR').scrollTop($('.iNjobR')[0].scrollHeight);
 
 
@@ -132,22 +135,10 @@ function leave(dir='left'){
                 { left: '-400px' }, 
                 { duration: 3000, queue: false }
             );
-
-
-    
-
-        var buh;
-        setTimeout(function() {
-            buh = $('<img>', {
-                class: 'deny_walk',
-                src: uri + 'res/img/deny_walk.png?' + new Date().getTime()
-            }).appendTo('#sus');
-        }, 1000);
         
-        // Set a timeout to remove the image after 30 seconds (30,000 milliseconds)
         setTimeout(function() {
-            buh.remove(); // Completely remove the image element
-        }, 4500);
+            spawnDeniedTraveller();
+        }, 2000);
 
 
     }else if (dir==='right'){
@@ -159,8 +150,10 @@ function leave(dir='left'){
                 { left: '800px' }, 
                 { duration: 3000, queue: false }
             );
-
-        spawnAcceptedTraveler();
+        
+        setTimeout(function() {
+            spawnAcceptedTraveler();
+        }, 2000);
     }
 }
 
@@ -179,8 +172,7 @@ function applyHandwritingEffect() {
 
 function setRandomFont(element) {
     const fonts = [
-        'QEDaveMergens',
-        'handwriting',
+        'QEDaveMergens'
         // 'QEAntonyLark',
         // 'QEBradenHill',
         // 'QECarolineMutiboko',
