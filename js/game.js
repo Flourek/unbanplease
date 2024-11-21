@@ -40,6 +40,8 @@ music.loop = true; // Set looping
 
 $(document).ready(function() {
 
+    setupChatVoting();
+
     $('title').text('UNBAN PLEASE');
 
     // Call the function initially
@@ -772,6 +774,7 @@ function next (){
     if (numberOfAppeals >= appealsDone){
         
         occupied = true;
+        resetVotes();
 
         sound('speech-announce.wav')
         sound('traveler-walkin.wav', 1500);
@@ -802,4 +805,6 @@ function shouldEnd(){
         }, 3000);
     }
 }
+
+
 

@@ -1148,3 +1148,55 @@ input::placeholder {
 .button:hover {
     background-color: #0056b3;
 }
+
+#voting {
+    z-index: 1003;
+    position: fixed;
+    left: 0;
+    top: 0;
+    font-size: 24px !important;
+    text-align: center;
+}
+
+#voteDenied {
+    position: absolute;
+    left: 332px;
+    top: 985px;
+    font-size: inherit !important;
+    width: 35px;
+    color: #800505;
+}
+
+#voteAccepted {
+    position: absolute;
+    left: 380px;
+    top: 985px;
+    font-size: inherit !important;
+    width: 35px;
+    color: #158c15;
+}
+
+#voteBar {
+    position: absolute;
+    left: 327px;
+    top: 970px;
+    width: 95px;
+    border: #000000 2px solid;
+    height: 10px;
+}
+
+#voteBarAccepted{
+    position: absolute;
+    left: 50%;
+    background-color: #158c15;
+    width: 0;
+    height: 5px;
+}
+
+#voteBarDenied {
+    position: absolute;
+    background-color: #800505;
+    height: 5px;
+    right: 50%;
+    width: 0;
+}
