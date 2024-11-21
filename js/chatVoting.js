@@ -6,7 +6,7 @@ var voters = new Set();
 function setupChatVoting() {
     console.log("Voting system initialized...");
     const client = new tmi.Client({
-        options: { debug: true },
+        options: { debug: false },
         channels: ['psp1g']
     });
 
@@ -33,9 +33,6 @@ function setupChatVoting() {
         }
         updateVotingBar();
 
-        // Debug logs
-        console.log(tags['username']);
-        console.log(`Votes: DENIED=${votesDenied} | APPROVED=${votesAccept}`);
     });
 }
 
