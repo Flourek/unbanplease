@@ -347,7 +347,6 @@ function keyboardBinds() {
             e.preventDefault(); // Prevents the default space scroll behavior
             streamerMode = !streamerMode;
             setAvatars();
-            giveMoney();
 
         }
         if (e.key == 's') {
