@@ -168,7 +168,11 @@ function mouseBinds(){
         pressStamp($(this), false);
     });
     
-    
+    $('.stampButton').mouseup(function() {
+        sound('stamp-up.wav')
+    });
+
+
     $(document).mouseup(function() {
         $('.stampButton').each(function() {
             unpressStamp($(this));
@@ -630,7 +634,6 @@ function pressStamp(obj, unban=false){
 function unpressStamp(obj){
     if ($('#stamps').hasClass('stamp-hide')) return;
 
-    sound('stamp-up.wav')
     obj.css('transform', 'translateY(0px)');
 }
 
