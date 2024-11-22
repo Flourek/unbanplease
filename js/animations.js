@@ -26,7 +26,7 @@ function resetPapers(){
 
 
         $('#appeal')
-            .css({'top': '650px', 'left': '300px', })
+            .css({'top': '650px', 'left': '300px', 'z-index': paperZIndex + 1005 + 1})
             .animate({ top: '730px'}, 300)  
 
       }, 3000); // Delay in milliseconds
@@ -52,26 +52,32 @@ function resetPapers(){
             .animate({ top: "-=200px" }, 300, function() {sound('printer-tear.wav', 0);  })
 
         $(DragablePapers).addClass('draggable');
-        twitchClickDenyUnban(false);
         censorText("#unban-request-details");
-        
-        var gzftbsContent = $('.loBtjK').detach();
-        $('#visa').append(gzftbsContent);
-        // $('.iNjobR').scrollTop($('.iNjobR')[0].scrollHeight);
+        $('#visa .loBtjK').remove();
+        getFollowInfo();
+
 
 
         
     }, 2000); // Delay in milliseconds
 
     setTimeout(function() {
-        twitchClickDenyUnban(false);
         setAvatars();
     }, 500);
 
+}
 
+function getFollowInfo(){
+    $('.unban-requests-item-header__title .bNYaHs.tw-link').click();
     
+    const interval = setInterval(() => {
+        const element = $('.viewer-card-header__display-name');
 
-
+        if (element.length > 0 && element.text().trim() !== '') {
+            clearInterval(interval); // Stop polling
+            $('.unban-requests-item-header__title').html(element.clone());
+        }
+    }, 100); // Check every 100ms
 }
 
 
@@ -167,6 +173,23 @@ function applyHandwritingEffect() {
     setRandomFont('#appealContent');
 }
 
+
+function giveMoney(){
+    
+    const money = $('<img />', {
+        src: uri + 'res/img/MoneyInner5.png',
+        class: 'money visa-smol draggable',
+        css: {
+            left: '300px',      
+            top: '650px',
+            'z-index': 1003
+        }
+    });
+
+    $('#sus').append(money);
+    const randomY = Math.floor(Math.random() * 50) + 740;
+    money.animate({ top: `${randomY}px` }, 300);
+}
 
 
 

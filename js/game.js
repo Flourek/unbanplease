@@ -21,11 +21,11 @@ var sniping = false;
 const baseWidth = 1920;
 const baseHeight = 1080;
 
-const UnbanDenyButton = '.cmxSxj';
-const SendUnbanDecisionButton = '.dJEfYL';
+const UnbanDenyButton = '#visa .cmxSxj';
+const SendUnbanDecisionButton = '#visa .dJEfYL';
 const ResolutionDiv = '.kndAiU';
 const ResolutionTextArea = '.gzFSTs textarea';
-const DragablePapers = '#visa, #unban-request-details, #appeal'
+const DragablePapers = '#visa, #unban-request-details, #appeal, .money'
 const AppealMessage = '.unban-requester-message'
 
 const PaperBorderRight = 1776;
@@ -74,7 +74,11 @@ $(document).ready(function() {
         console.log("Paper Z-Index: ", paperZIndex);
         paperZIndex += 1;
         if (paperZIndex > 1000) {paperZIndex = 5}
-        $(this).css('z-index', paperZIndex);
+        if($(this).hasClass('visa-smol')){
+            $(this).css('z-index', paperZIndex + 1005);
+        }else{
+            $(this).css('z-index', paperZIndex);
+        }
 
 
     if (isDraggable(e)) {
@@ -107,6 +111,7 @@ $(document).ready(function() {
                 if(wasSmol != draggable.hasClass('visa-smol')){
                     transitionScale = getScaledDimensions(draggable).transformScale * scale;
                 }
+              
                     
                 let newLeft = e.clientX / scale - offsetX * paperScale * transitionScale;
                 let newTop =  e.clientY / scale - offsetY * paperScale * transitionScale;
@@ -120,20 +125,10 @@ $(document).ready(function() {
                 draggable.css({
                     top:  newTop   + 'px',
                     left: newLeft   + 'px',
-                    position: 'absolute'
+                    position: 'absolute',
+                    'z-index': paperZIndex + (smol ? 1005 : 0)
                 });
                 
-                console.log(draggable.attr('id') );
-                if(draggable.attr('id') === "visa"){
-                    // $('.gzFSTs .eoboxF').css({
-                    //     top:  newTop    + 'px',
-                    //     left: newLeft   + 'px',
-                    //     position: 'fixed',
-                    //     'z-index':  paperZIndex
-                    // })
-                }
-              
-               
             }
         });
      }
@@ -321,7 +316,6 @@ function keyboardBinds() {
     // keydown handler
     $(document).keydown(function(e){
 
-
         // Prevent typing in text area when using binds
         if (e.keyCode === 9 || isDragging) {
             e.preventDefault(); 
@@ -353,6 +347,7 @@ function keyboardBinds() {
             e.preventDefault(); // Prevents the default space scroll behavior
             streamerMode = !streamerMode;
             setAvatars();
+            giveMoney();
 
         }
         if (e.key == 's') {
@@ -593,6 +588,9 @@ function stampsToggle () {
 
 function twitchClickDenyUnban(unban=true){
     
+    var gzftbsContent = $('.loBtjK').detach();
+    $('#visa').append(gzftbsContent);
+    
     var buttons = $(UnbanDenyButton).toArray();
 
     if ( buttons.length == 1 ) {
@@ -618,7 +616,7 @@ function twitchSortByOldest(){
 
 
 function toggleUserCard(){
-    $('.unban-requests-item-header__title .bNYaHs.tw-link').click();
+    $('.viewer-card-layer').toggleClass('showUserCard');
 }
 
 
@@ -756,7 +754,7 @@ function getAppealsCount(){
 }
 
 function updateCounter(){
-    const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} | Accepted: ${appealsAccepted} | Denied: ${appealsDenied}`;
+    const result = `${appealsAccepted + appealsDenied}/${numberOfAppeals} | Accepted: ${appealsAccepted} | Denied: ${appealsDenied} | Bans: ${newBans} `;
     $('#countText').html(result);
 }
 
