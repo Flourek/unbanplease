@@ -26,7 +26,7 @@ function setupChatVoting() {
 
     client.on('message', async (channel, tags, message, self) => {
         if(self || !message.startsWith('-')) return;
-        if (tags.username.toLowerCase() == 'nightbot')
+        if (tags.username.toLowerCase() == 'nightbot') return;
         if( !(tags.mod || tags.username == getChannelName())) return;
         
         console.log(tags);
@@ -60,6 +60,7 @@ function setupChatVoting() {
 
     client.on('message', (channel, tags, message, self) => {
         if (self) return;
+        if (tags.username.toLowerCase() == 'nightbot') return;
 
         const username = tags.username;
         let currentVote = voters.get(username);
