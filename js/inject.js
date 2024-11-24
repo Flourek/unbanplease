@@ -1,32 +1,41 @@
 var uri = new URL('https://flourek.github.io/unbanplease/');
 
-function loadjQuery(callback) {
-    var script = document.createElement('script');
-    script.src = "https://code.jquery.com/jquery-3.7.1.js";  // URL of jQuery CDN
-    script.type = 'text/javascript';
-    
-    // When jQuery is loaded, load jQuery UI
-    script.onload = function() {
-        var scripte = document.createElement('script');
-        scripte.src = "https://code.jquery.com/ui/1.14.0/jquery-ui.js";  // URL of jQuery UI CDN
-        scripte.type = 'text/javascript';
-        scripte.onload = callback;  // When jQuery UI is loaded, execute the callback
-        document.head.appendChild(scripte);
-    };
-    
-    document.head.appendChild(script);  // Append jQuery script to head
+function loadScripts(urls, callback) {
+    let index = 0;
+
+    function loadNextScript() {
+        if (index < urls.length) {
+            const script = document.createElement('script');
+            script.src = urls[index];
+            script.type = 'text/javascript';
+            script.onload = () => {
+                console.log(`Loaded: ${urls[index]}`);
+                index++;
+                loadNextScript(); // Load the next script
+            };
+            script.onerror = () => {
+                console.error(`Failed to load: ${urls[index]}`);
+            };
+            document.head.appendChild(script);
+        } else if (typeof callback === 'function') {
+            callback(); // Execute the callback when all scripts are loaded
+        }
+    }
+
+    loadNextScript();
 }
 
-
-// Entry point
-loadjQuery(function() {
-    $(document).ready(function() {
-
-        startObserving();
-        console.log("jQuery has been loaded and is ready to use.");
-  
-    });
+// Example usage
+loadScripts([
+    "https://code.jquery.com/jquery-3.7.1.js", 
+    "https://code.jquery.com/ui/1.14.0/jquery-ui.js",
+    "https://flourek.github.io/unbanplease/js/Twitch/tmi.min.js",
+    "https://flourek.github.io/unbanplease/js/Twitch/DeviceCodeFlow.js"
+], () => {
+    startObserving();
+    console.log("All scripts loaded successfully!");
 });
+
 
 // Function waiting for twitch to load everything
 function startObserving() {

@@ -16,6 +16,7 @@ var queue;  // js array of <button> found in the sidebar with the appeals
 var numberOfAppeals = 0;
 var appealsDenied = 0;
 var appealsAccepted = 0
+var ShotTravelers = 0;
 var sniping = false;
 
 const baseWidth = 1920;
@@ -25,7 +26,7 @@ const UnbanDenyButton = '#visa .cmxSxj';
 const SendUnbanDecisionButton = '#visa .dJEfYL';
 const ResolutionDiv = '.kndAiU';
 const ResolutionTextArea = '.gzFSTs textarea';
-const DragablePapers = '#visa, #unban-request-details, #appeal, .money'
+const DragablePapers = '#visa, #unban-request-details, #appeal, .moneyWrapper'
 const AppealMessage = '.unban-requester-message'
 
 const PaperBorderRight = 1776;
@@ -179,10 +180,17 @@ function mouseBinds(){
         });
     });
 
-    $('#borderContainer').mousedown(function() {
+    $('#borderContainer').mousedown(function(e) {
         snipe();
     });
-
+    
+    $('#snipeMask *').mousedown(function(e) {
+        if(!sniping) return;
+        timeoutRandom();
+        position = {left: (e.clientX - 20) / scale, top: (e.clientY - 35) / scale};
+        console.log(scale);
+        spawnDeadTraveler(position);
+    });
 
 }
 
@@ -214,6 +222,8 @@ function snipe(){
             $element.css("filter", "brightness(" + now + ")");
         }
     });
+
+
 
 }
 
@@ -297,20 +307,27 @@ function spawnDeniedTraveller(){
 function makeTravelerShootable(){
     $('.travelerWalking').mousedown(function() {
         if(!sniping) return;
-        const position = getScaledDimensions($(this));
-        const travelerDead = $('<img />', {
-            src: uri + 'res/img/travellerDeath.webp?' + new Date().getTime(), // Image URL
-            class: 'travelerDead',
-            css: {
-                left: position.left,
-                top: position.top + Math.floor(Math.random() * 20),
-            }
-        });
-    
-        $('#borderContainer').append(travelerDead);
-
+        spawnDeadTraveler(getScaledDimensions($(this)));
         $(this).remove();
     });
+}
+
+function spawnDeadTraveler(position){
+
+    ShotTravelers++;
+    getScaleFactor();
+
+    const travelerDead = $('<img />', {
+        src: uri + 'res/img/travellerDeath.webp?' + new Date().getTime(), // Image URL
+        class: 'travelerDead',
+        css: {
+            left: position.left,
+            top: position.top + Math.floor(Math.random() * 20),
+            position: 'absolute'
+        }
+    });
+
+    $('#borderContainer').append(travelerDead);
 }
 
 

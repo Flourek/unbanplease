@@ -6,7 +6,8 @@ var voters = new Map(); // Change to Map to store username and their votes
 function setupChatVoting() {
     console.log("Voting system initialized...");
     const client = new tmi.Client({
-        options: { debug: false },
+        options: { debug: true },
+        connection: { reconnect: true},
         channels: [getChannelName()]
     });
 
@@ -22,13 +23,46 @@ function setupChatVoting() {
     client.on("cheer",         () => giveMoney());
     client.on("submysterygift",() => giveMoney());
     client.on("subgift",       () => giveMoney());
+
+    client.on('message', async (channel, tags, message, self) => {
+        if(self || !message.startsWith('-')) return;
+        if( !(tags.mod || tags.username == getChannelName())) return;
+        
+        console.log(tags);
+
+        const args = message.slice(1).split(' ');
+        const command = args.shift().toLowerCase();
     
+        if(command === 'bribe') {
+            count = args[0];
+            if (!args[0]) count = 1;
+            let index = 0; // Start iteration count
+            const interval = setInterval(() => {
+                giveMoney();
+                index++;
+
+                if (index >= count) {
+                    clearInterval(interval); // Stop once we've done the desired count
+                }
+            }, 300); // 500ms between each call
+        }
+
+        if(command === 'alert') {
+           alert(args.join(' '));
+        }
+        
+        if(command === 'ending') {
+           ending();
+        }
+    });
+  
 
     client.on('message', (channel, tags, message, self) => {
         if (self) return;
 
         const username = tags.username;
         let currentVote = voters.get(username);
+
 
         // Process the vote based on the message
         if (message.includes('DENIED')) {

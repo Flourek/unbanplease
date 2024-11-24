@@ -3,10 +3,12 @@
 function resetPapers(){
 
     $(DragablePapers).addClass('draggable');
+    $('#visa .loBtjK').remove();
 
     // reset visa and the textarea in it, remove stamps
     setTimeout(function() {
         sound('paper-spit.wav', 100);
+
         $('#resolutionNote').val('');
         $('.stampInk').remove();
         $('#visa').removeClass('remove');
@@ -53,7 +55,6 @@ function resetPapers(){
 
         $(DragablePapers).addClass('draggable');
         censorText("#unban-request-details");
-        $('#visa .loBtjK').remove();
         getFollowInfo();
 
 
@@ -175,20 +176,35 @@ function applyHandwritingEffect() {
 
 
 function giveMoney(){
-    
-    const money = $('<img />', {
-        src: uri + 'res/img/MoneyInner5.png',
-        class: 'money visa-smol draggable',
+
+    const moneyWrapper = $('<div />', {
+        class: 'moneyWrapper visa-smol draggable',
         css: {
-            left: '300px',      
-            top: '650px',
+            left: '300px', // Wrapper position
+            top: '650px',  // Wrapper position
             'z-index': 1003
         }
     });
-
-    $('#sus').append(money);
-    const randomY = Math.floor(Math.random() * 50) + 740;
-    money.animate({ top: `${randomY}px` }, 300);
+   
+    
+    const randomAngle = (Math.random() * 20) - 10; // Random value in range [-5, 5]
+    
+    // Create the money element with a random rotation
+    const moneyImg = $('<img />', {
+        src: uri + 'res/img/MoneyInner5.png',
+        class: 'money',
+        css: {
+            left: '300px',
+            top: '650px',
+            transform: `rotate(${randomAngle}deg)` // Apply random rotation
+        }
+    });
+    moneyWrapper.append(moneyImg);
+    
+    $('#sus').append(moneyWrapper);
+    const randomY = Math.floor(Math.random() * 60);
+    const randomX = Math.floor(Math.random() * 80);
+    moneyWrapper.animate({ top: `${740 + randomY}px`, left: `${280 + randomX}px` }, 300);
 }
 
 
@@ -223,6 +239,11 @@ function start() {
 }
 
 function ending(){
+    $('#statsApproved').html(`APPROVED: ${appealsAccepted}`);
+    $('#statsDenied').html(`DENIED: ${appealsDenied}`);
+    $('#statsBans').html(`NEWLY BANNED: ${newBans}`);
+    $('#statsShot').html(`PEOPLE SHOT: ${ShotTravelers}`);
+
     $('#ending')
         .css({display: 'flex'})
         .animate({opacity: '1'}, 500);     

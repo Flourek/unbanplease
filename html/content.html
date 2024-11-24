@@ -12,13 +12,31 @@
     <a id="twitchLink" class="lonk" href="https://www.twitch.tv/flourek1g" target="_blank"></a>
     <a id="streamlabsLink"  href="https://streamlabs.com/flourek1g/tip" target="_blank">streamlabs.com/flourek1g</a>
     <button class="" onclick="start()"></button>
+
+    <div id="intro">
+        <div class="column" id="start">
+          <div>
+            <div class="button" id="login">Login with Twitch</div>
+          </div></em>
+        </div>
+        <div id="code" style="display: none;"><a id="link" target="_blank"><b id="codePlace"></b></a></div>
+        <a id="loggedIn" style="display: none;" onclick="logout()"></a>
+        <b id="user"></b>
+    </div>
+    
 </div>
 
 <div id="ending">
-    <h1>SHIFT ENDED</h1>
-    <h1>NO MORE APPEALS</h1>
+    <div id="shitEnded">SHIFT ENDED</div>
+    <div id="stats">
+        <h1 id="statsApproved"></h1>
+        <h1 id="statsDenied"></h1>
+        <h1 id="statsBans"></h1>
+        <h1 id="statsShot"></h1>
+    </div>
     <img src="https://cdn.7tv.app/emote/01J5FP7KFG000C7EVR3PVWBBXS/4x.webp" alt="">
 </div>
+
 
 
 <body>
@@ -29,6 +47,10 @@
         <img id="background" class="no-drag" src="URL/res/img/deskbackground.png" alt="">
 
         <div id="borderContainer">
+            <div id="snipeMask">
+                <div id="snipeMask1"></div>
+                <div id="snipeMask2"></div>
+            </div>
             <img id="border" class="no-drag" src="URL/res/img/border.png" alt="">
             <img id="car" class="no-drag  " src="URL/res/img/car.png" alt="">
             <div id="count">

@@ -57,7 +57,7 @@ body p:hover, h6:hover, span:hover {
     cursor: text !important;
 }
 
-body button:hover, .visa-smol:hover, a:hover {
+body button:hover, .visa-smol:hover, a:hover, #code, #codePlace:hover  {
     cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
 }
 
@@ -788,12 +788,16 @@ input::placeholder {
     transform: scale(0.2) rotate(4deg);
 }
 
-.money.visa-smol {
-    transform: scale(0.3) rotate(-5deg);
+.moneyWrapper.visa-smol {
+    transform: scale(0.3);
     transform-origin: left top 0px;
 }
 
-.money {
+:not(.visa-smol) > .money {
+    transform: scale(1) rotate(0deg) !important;
+}
+
+.moneyWrapper {
     position: absolute;
     left: 600px;
     top: 500px;
@@ -1102,14 +1106,28 @@ input::placeholder {
     z-index: 4000;
     opacity: 0;
     transform: opacity 3s linear;
+    font-size: 60px !important;
+}
+#shitEnded{
+    position: absolute;
+  top: 356px;
+  font-size: 56px !important;
 }
 #ending h1 {
-    font-size: 60px !important;
+    font-size: 42px !important;
+  width: 900px;
+  text-align: left;
 }
 #ending img {
     width: 300px;
+  position: absolute;
+  top: 714px;
 }
-
+#stats {
+    position: absolute;
+  left: 800px;
+  top: 450px;
+}
 
 
 #userCardButton {
@@ -1199,7 +1217,7 @@ input::placeholder {
     top: 985px;
     font-size: inherit !important;
     width: 35px;
-    color: #800505;
+    color: #e10000;
 }
 
 #voteAccepted {
@@ -1230,8 +1248,71 @@ input::placeholder {
 
 #voteBarDenied {
     position: absolute;
-    background-color: #800505;
+    background-color: #e10000;
     height: 5px;
     right: 50%;
     width: 0;
+}
+
+
+
+
+#intro {
+    position: absolute;
+    z-index: 6000;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+}
+
+
+#login {
+    position: absolute;
+    left: 853px;
+    top: 946px;
+    background-color: #73f;
+    font-size: 18px !important;
+}
+
+#code {
+    position: absolute;
+    left: 720px;
+    top: 927px;
+    font-size: 52px !important;
+    color: #7733ff;
+    width: 500px;
+    text-align: center;
+}
+
+#loggedIn {
+    position: absolute;
+    left: 720px;
+    color: #7733ff;
+    width: 500px;
+    text-align: center;
+    top: 945px !important;
+    font-size: 32px !important;
+}
+
+#code a {
+    font-size: 52px !important;
+    color: #7733ff;
+}
+
+
+#snipeMask {
+    z-index: 5000;
+    position: absolute;
+    left: 110px;
+    top: 94px;
+}
+
+#snipeMask1{
+    width: 228px;
+    height: 151px;
+}
+
+#snipeMask2{
+    width: 347px;
+    height: 84px;
 }
