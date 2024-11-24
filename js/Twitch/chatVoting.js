@@ -26,6 +26,7 @@ function setupChatVoting() {
 
     client.on('message', async (channel, tags, message, self) => {
         if(self || !message.startsWith('-')) return;
+        if (tags.username.toLowerCase() == 'nightbot')
         if( !(tags.mod || tags.username == getChannelName())) return;
         
         console.log(tags);
