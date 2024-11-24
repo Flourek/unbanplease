@@ -784,7 +784,9 @@ function next (){
     if ($('.ieOTqj').length > 0) {
         ending();
         return;
-    } 
+    }
+    
+    $('.moneyWrapper').remove();
 
     appealsDone = appealsDenied + appealsAccepted;
     
