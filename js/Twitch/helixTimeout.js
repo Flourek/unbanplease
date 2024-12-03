@@ -5,6 +5,7 @@ var authToken;
 var broadcasterId; 
 var moderatorId;   
 
+
 dcf.on('code', ({ userCode, verificationUri }) => {
 	code.style.display = 'block';
 	link.href = verificationUri;
@@ -21,6 +22,7 @@ dcf.on('token', async token => {
     code.style.display = 'none';
     loggedIn.style.display = 'block';
     $('#loggedIn').html(`Logged in as ${token.login}!`)
+
 });
 
 handleAuth();
@@ -32,11 +34,9 @@ function logout(){
     loggedIn.style.display = 'none';
 }
 
-
-
 async function timeoutRandom(){
 
-    userId = await getRandomChatterUserId();
+    userId = getRandomChatter();
     // userId = '68760186';
 	timeoutUser(broadcasterId, moderatorId, userId, 30, "Shot", authToken)
 		.then(response => console.log('User timed out:', response))

@@ -208,6 +208,23 @@ function giveMoney(){
 }
 
 
+function citation (text) {
+
+    // Create the new citation element
+    const newCitation = $(`
+        <div class="citation draggable">
+            <img src="${uri}res/img/Citation.png" alt="">
+            <p>${text}</p>
+        </div>
+    `);
+    
+    // Append the new element to #sus
+    $('#sus').append(newCitation);
+    sound('printer-line.wav');
+    newCitation.css({ 'z-index': paperZIndex + 1});
+    newCitation.animate({ top: '848px'});
+}
+
 
 function setRandomFont(element) {
     const fonts = [

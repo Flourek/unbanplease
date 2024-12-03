@@ -3,6 +3,9 @@ var votesDenied = 0;
 var newBans = 0;
 var voters = new Map(); // Change to Map to store username and their votes
 
+var chatters = new Set();
+
+
 function setupChatVoting() {
     console.log("Voting system initialized...");
     const client = new tmi.Client({
@@ -25,6 +28,8 @@ function setupChatVoting() {
     client.on("subgift",       () => giveMoney());
 
     client.on('message', async (channel, tags, message, self) => {
+        chatters.add(tags['user-id']);
+
         if(self || !message.startsWith('-')) return;
         if (tags.username.toLowerCase() == 'nightbot') return;
         if( !(tags.mod || tags.username == getChannelName())) return;
@@ -49,7 +54,7 @@ function setupChatVoting() {
         }
 
         if(command === 'alert') {
-           alert(args.join(' '));
+            citation(`${tags['display-name']}: ${args.join(' ')}`);
         }
         
         if(command === 'ending') {
@@ -107,6 +112,16 @@ function resetVotes() {
     voters.clear(); // Clear the set of voters
     console.log("Votes and voters have been reset.");
     updateVotingBar();
+}
+
+
+function getRandomChatter() {
+    const arrayFromSet = Array.from(chatters);
+
+    // Get a random element
+    const randomElement = arrayFromSet[Math.floor(Math.random() * arrayFromSet.length)];
+
+    return randomElement
 }
 
 function updateVotingBar() {

@@ -1,5 +1,5 @@
 
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('http://127.0.0.1:5500/');
 
 var occupied = false;
 var lastTraveller = false;
@@ -23,7 +23,7 @@ const baseWidth = 1920;
 const baseHeight = 1080;
 
 const UnbanDenyButton = '#visa .cmxSxj';
-const SendUnbanDecisionButton = '#visa .dJEfYL';
+const SendUnbanDecisionButton = '#visa .khjbBN';
 const ResolutionDiv = '.kndAiU';
 const ResolutionTextArea = '.gzFSTs textarea';
 const DragablePapers = '#visa, #unban-request-details, #appeal, .moneyWrapper'
@@ -717,7 +717,10 @@ function finalize() {
     
     element.blur();
     $('textarea').blur(); 
-    $('#unban-request-details, #appeal').addClass('remove');
+    $('#unban-request-details, #appeal, .moneyWrapper, .citation').addClass('remove');
+    setTimeout(() => {
+        $('.moneyWrapper, .citation').remove();
+    }, 500);
     $('#stamps').addClass('stamp-hide');
     
     updateCounter();
@@ -786,7 +789,7 @@ function next (){
         return;
     }
     
-    $('.moneyWrapper').remove();
+    
 
     appealsDone = appealsDenied + appealsAccepted;
     

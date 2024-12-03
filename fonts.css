@@ -1,7 +1,7 @@
 
 @font-face {
     font-family: 'papers';
-    src: url('https://flourek.github.io/unbanplease/res/font/papers.TTF') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/papers.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-smooth: never;
@@ -10,42 +10,42 @@
 
 @font-face {
     font-family: 'handwriting';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEVRead.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEVRead.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'QEAntonyLark';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEAntonyLark.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEAntonyLark.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QEBEV';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEBEV.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEBEV.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QEBradenHill';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEBradenHill.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEBradenHill.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QECarolineMutiboko';
-    src: url('https://flourek.github.io/unbanplease/res/font/QECarolineMutiboko.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QECarolineMutiboko.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QEDaveMergens';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEDaveMergens.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEDaveMergens.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QEGHHughes';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEGHHughes.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEGHHughes.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'QEHerbertCooper';
-    src: url('https://flourek.github.io/unbanplease/res/font/QEHerbertCooper.ttf') format('truetype');
+    src: url('http://127.0.0.1:5500/res/font/QEHerbertCooper.ttf') format('truetype');
 }

@@ -14,6 +14,7 @@
     --color-text-alt-2: rgb(32, 32, 32);
     --color-fill-button-icon: rgb(122, 122, 122);
     --color-fill-current: rgb(122, 122, 122);
+    --color-background-base: rgb(255, 253, 249);
 }
 
 * {
@@ -27,7 +28,7 @@
 } */
 
 body {
-    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorArrow.png'), auto;
+    cursor: url('http://127.0.0.1:5500/res/img/CursorArrow.png'), auto;
     margin: 0;
     padding: 0;
     width: 1920px; /* Design for 1920px width */
@@ -39,7 +40,7 @@ body {
 }
 
 .snipingCursor{
-    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorScopeKill.png') 48 48, auto !important;
+    cursor: url('http://127.0.0.1:5500/res/img/CursorScopeKill.png') 48 48, auto !important;
 }
 
 .tw-root--hover body {
@@ -58,7 +59,7 @@ body p:hover, h6:hover, span:hover {
 }
 
 body button:hover, .visa-smol:hover, a:hover, #code, #codePlace:hover  {
-    cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto;
+    cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto;
 }
 
 ::selection {
@@ -524,6 +525,10 @@ input::placeholder {
 }
 
 
+/* clips */
+.kSugQB {
+    display: none !important;
+}
 
 .kndAiU{
     /* display: none !important; */
@@ -610,12 +615,12 @@ input::placeholder {
 }
 
 #countText {
-    font-size: 25px !important;
+    font-size: 22px !important;
     color: #939393;
     position: absolute;
-    width: 540px;
-    top: -1px;
-    left: 8px;
+    width: 572px;
+    top: 0px;
+    left: 11px;
 }
 
 
@@ -733,7 +738,7 @@ input::placeholder {
 }
 
 /* .travelerWalking:hover{ */
-    /* cursor: url('https://flourek.github.io/unbanplease/res/img/CursorHand.png') 16 2, auto; */
+    /* cursor: url('http://127.0.0.1:5500/res/img/CursorHand.png') 16 2, auto; */
 /* } */
 
 .travelerDead {
@@ -753,7 +758,7 @@ input::placeholder {
     overflow: hidden !important;
     transform-origin: top left !important;
     z-index: 5;
-    mask-image: url('https://flourek.github.io/unbanplease/res/img/visa.png');
+    mask-image: url('http://127.0.0.1:5500/res/img/visa.png');
     mask-repeat: no-repeat;
     mask-size: cover;
 }
@@ -790,6 +795,11 @@ input::placeholder {
 
 .moneyWrapper.visa-smol {
     transform: scale(0.3);
+    transform-origin: left top 0px;
+}
+
+.citation.visa-smol {
+    transform: scale(0.3) rotate(-4deg);
     transform-origin: left top 0px;
 }
 
@@ -1315,4 +1325,22 @@ input::placeholder {
 #snipeMask2{
     width: 347px;
     height: 84px;
+}
+
+.citation {
+    position: absolute;
+    left: 985px;
+    top: 1080px;
+    z-index: 5;
+}
+
+.citation p {
+    position: absolute;
+  top: 60px;
+  left: 26px;
+  font-size: 24px !important;
+  width: 470px;
+  line-break: anywhere;
+  height: 100px;
+  overflow-y: scroll;
 }
