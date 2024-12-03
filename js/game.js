@@ -1,5 +1,5 @@
 
-var uri = new URL('http://127.0.0.1:5500/');
+var uri = new URL('https://flourek.github.io/unbanplease/');
 
 var occupied = false;
 var lastTraveller = false;
