@@ -1347,9 +1347,9 @@ input::placeholder {
   top: 60px;
   left: 26px;
   font-size: 24px !important;
-  width: 470px;
+  max-width: 470px;
   line-break: anywhere;
-  height: 120px;
+  max-height: 120px;
   overflow-y: scroll;
 }
 
