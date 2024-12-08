@@ -218,3 +218,9 @@ async function handleAuth() {
 
 // Example usage
 
+
+function getChannelName() {
+    const url = window.location.href; // Get the current URL
+    const match = url.match(/twitch\.tv\/popout\/moderator\/([^/]+)/);
+    return match ? match[1] : null; // Return the channel name or null if not found
+}

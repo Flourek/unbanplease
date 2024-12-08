@@ -1,5 +1,5 @@
 
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('http://flourek.github.io/unbanplease/');
 
 var occupied = false;
 var lastTraveller = false;
@@ -155,6 +155,7 @@ $(document).ready(function() {
     $(document).on('dragstart', function(e) {
         e.preventDefault();
     });
+
 
 });
 

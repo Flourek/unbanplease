@@ -1,4 +1,4 @@
-var uri = new URL('https://flourek.github.io/unbanplease/');
+var uri = new URL('http://flourek.github.io/unbanplease/');
 
 function loadScripts(urls, callback) {
     let index = 0;
@@ -29,8 +29,9 @@ function loadScripts(urls, callback) {
 loadScripts([
     "https://code.jquery.com/jquery-3.7.1.js", 
     "https://code.jquery.com/ui/1.14.0/jquery-ui.js",
-    "https://flourek.github.io/unbanplease/js/Twitch/tmi.min.js",
-    "https://flourek.github.io/unbanplease/js/Twitch/DeviceCodeFlow.js"
+    "http://flourek.github.io/unbanplease/js/Twitch/tmi.min.js",
+    "http://flourek.github.io/unbanplease/js/Twitch/DeviceCodeFlow.js",
+    "http://flourek.github.io/unbanplease/js/Twitch/emotes.js"
 ], () => {
     startObserving();
     console.log("All scripts loaded successfully!");

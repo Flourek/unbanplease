@@ -37,6 +37,21 @@ function resetPapers(){
 
     // reset the details with messages
     $('.kndAiU').removeClass('show');
+    censorText("#unban-request-details");
+    getFollowInfo();
+    adjustTextColorIfCloseToWhite('.message-author__display-name', 230, '#555'); //
+
+    // relpace emotes
+   $('.text-fragment').each(function() {
+        // Get the current HTML content of the element
+        var currentText = $(this).html();
+
+        // Replace the text using the replaceText function
+        var newText = replaceEmotes(currentText);
+
+        // Set the new HTML content back to the element
+        $(this).html(newText);
+    });
 
     setTimeout(function() {
         
@@ -54,8 +69,8 @@ function resetPapers(){
             .animate({ top: "-=200px" }, 300, function() {sound('printer-tear.wav', 0);  })
 
         $(DragablePapers).addClass('draggable');
-        censorText("#unban-request-details");
-        getFollowInfo();
+
+        // Example usage
 
 
 
@@ -69,7 +84,7 @@ function resetPapers(){
 }
 
 function getFollowInfo(){
-    $('.unban-requests-item-header__title .bNYaHs.tw-link').click();
+    $('.unban-requests-item-header__title .tw-link').click();
     
     const interval = setInterval(() => {
         const element = $('.viewer-card-header__display-name');
@@ -214,10 +229,11 @@ function citation (text) {
     const newCitation = $(`
         <div class="citation draggable">
             <img src="${uri}res/img/Citation.png" alt="">
-            <p>${text}</p>
+            <p>${replaceEmotes(text)}</p>
         </div>
     `);
     
+
     // Append the new element to #sus
     $('#sus').append(newCitation);
     sound('printer-line.wav');
@@ -268,3 +284,31 @@ function ending(){
     $(document).off("keydown");
     sound('Victory.wav');
 }
+
+
+
+function adjustTextColorIfCloseToWhite(selector, threshold, replacementColor) {
+    $(selector).each(function () {
+        // Get computed color of the element
+        let color = $(this).css("color");
+
+        // Create a hidden div to parse the color to RGB
+        let $tempDiv = $('<div>').css("color", color).appendTo('body');
+        let computedColor = $tempDiv.css("color");
+        $tempDiv.remove();
+
+        // Extract RGB components
+        let match = computedColor.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (match) {
+            let r = parseInt(match[1]);
+            let g = parseInt(match[2]);
+            let b = parseInt(match[3]);
+
+            // Check if the color is close to white
+            if (r > threshold && g > threshold && b > threshold) {
+                $(this).css("color", replacementColor);
+            }
+        }
+    });
+}
+
